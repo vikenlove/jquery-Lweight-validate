@@ -2,7 +2,7 @@
  * jquery-Lightweight-validation.js 
  * Original Idea: (Copyright 2013 Stefan Petre)
  * Updated by 大猫 
- * version 1.0.0 beta
+ * version 1.0.1 beta
  * =========================================================
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,7 @@
 (function($) {       
 $.fn.myValidate = function(btnId,callbacksuccess) {     
      //ajax点击事件处理
-  	$("#"+btnId).click(function(){
+		$("#"+btnId).click(function(){
 			if(!validateForm()){
 				callbacksuccess();
 			}				
@@ -189,8 +189,11 @@ var validateField = function(field,valid){
 			}
 		}
 	if(!error){
-	//校验长度	
+	
+	
+		//校验长度/是否含有异步请求函数
 		var minMax = (el.attr('min-max')==undefined)?null:el.attr('min-max').split(' ');	
+		var _callBack = (el.attr('call-back')==undefined)?null:el.attr('call-back').split(' ');
 		//截取长度区间 进行比较"1-5"
 		if(minMax!==null && minMax.length>0){
 			var min = el.attr('min-max').split('-')[0],max=el.attr('min-max').split('-')[1];
@@ -200,14 +203,20 @@ var validateField = function(field,valid){
 			}else if(max != undefined){
 				if(elLength >= Number(max)){
 					error=true;
-					errorMsg=(el.attr('max-message')==undefined)?"文本长度不能大于"+max+"个字符":el.attr('min-message');
+					errorMsg=(el.attr('max-message')==undefined)?"文本长度不能大于"+max+"个字符":el.attr('max-message');
 				}
+			}
+		}else if(_callBack!==null && _callBack.length>0){
+			var _ajaxCallBack = el.attr('call-back');
+			error = eval(_ajaxCallBack);
+			if(error){
+				errorMsg=(el.attr('call-message')==undefined)?"校验无法通过，请重新输入":el.attr('call-message');
 			}
 		}	
 	}
 	 
 	var curTextDiv=el.parent(), curErrorEl = curTextDiv.children('.help-inline');
-	
+	//添加/删除 错误描述信息
 	if(error){
 		//判断当前DIV 是否有错误信息的class
 		if(curErrorEl.hasClass('help-inline')){
@@ -229,6 +238,8 @@ var validateField = function(field,valid){
 	//验证不通过 返回 false 通过范围 true
 	return !error;
 };
+
+
 
 var passWordStatus = function(i){
 	var status ='';
