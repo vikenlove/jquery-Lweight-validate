@@ -223,23 +223,42 @@ var validateField = function(field,valid){
 			var overHelp = curErrorEl.text();
 			curTextDiv.data('help-inline',overHelp);
 		}else{
-			curTextDiv.append('<span class="help-inline">'+errorMsg+'</span>');
-		}			
+			curTextDiv.append('<span class="help-inline error">'+errorMsg+'</span>');
+		}
+		el.removeClass().addClass('error');
+		
 	}else if(pwdStatus > 0){
-			var pwdStatus = passWordStatus(pwdStatus);
-			if(curErrorEl.hasClass('help-inline')){
-				curTextDiv.data('help-inline',pwdStatus);
+		var pwdStrong = passWordStatus(pwdStatus);
+		var classpic = classStatus(pwdStatus);
+		if(curErrorEl.hasClass('help-inline')){
+				curTextDiv.data('help-inline',pwdStrong);
 			}else{
-				curTextDiv.append('<span class="help-inline">'+pwdStatus+'</span>');
-			}		
+				curTextDiv.append('<span class="help-inline '+classpic+'">'+pwdStrong+'</span>');
+		}
+		el.removeClass().addClass('right');	
 	}else{
 		curErrorEl.remove();
+		el.removeClass().addClass('right');
 	}
 	//验证不通过 返回 false 通过范围 true
 	return !error;
 };
 
-
+var classStatus = function(i){
+	var status ='';
+	switch(i){
+		case 1:
+			status="passWord3";
+			break;
+		case 2:
+			status="passWord2";
+			break;
+		case 3:
+			status="passWord1";
+			break;	
+	}
+	return status;
+}
 
 var passWordStatus = function(i){
 	var status ='';
