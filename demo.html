@@ -5,8 +5,8 @@
 	<title>Forms</title> 
 <link href="Lweight.css" type="text/css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" media="screen" href="stylesheet.css">
-	<script src="jquery-1.7.1.min.js"></script> 
-	<script src="jquery-Lweight-validation.js"></script>
+	<script src="jquery.js"></script> 
+	<script src="jquery-Lweight-validate.js"></script>
 	
 	<script>
 
@@ -47,7 +47,8 @@
 					<input type="text" id="inputtext" check-type="required"
 						min-max="3-5" min-message="字符长度不得小于3个字符" 
 						max-message="字符长度不得超过5个字符"  
-						required-message="文本不能为空！" >
+						required-message="文本不能为空！">
+						
 				</div>
 			</div>
 			
@@ -56,7 +57,7 @@
 				<div class="controls">
 					<input type="text" id="inputName" check-type="required" 
 					call-back="mycallback()" call-message="用户名名已存在"  required-message="用户名不能为空" >
-				</div>
+					</div>
 			</div>
 			
 			
@@ -82,6 +83,7 @@
 				<label class="control-label" for="inputPassword">密码</label>
 				<div class="controls">
 					<input type="password" id="inputPassword" check-type="passWord" required-message="密码长度必须在6~16之间！" >
+
 				</div>
 			</div>
 			<div class="control-group">
