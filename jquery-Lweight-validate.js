@@ -2,7 +2,7 @@
  * jquery-Lightweight-validation.js 
  * Original Idea: (Copyright 2013 Stefan Petre)
  * Updated by 大猫 
- * version 1.0.1 beta
+ * version 1.0.2 beta
  * =========================================================
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
