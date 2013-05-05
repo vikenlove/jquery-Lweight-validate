@@ -19,13 +19,13 @@
  * ========================================================= */
 (function($) {       
 $.fn.myValidate = function(btnId,callbacksuccess) {     
-     //ajax点击事件处理
+     
 		$("#"+btnId).click(function(){
 			if(!validateForm()){
 				callbacksuccess();
 			}				
 		});
-		//鼠标焦点事件处理
+		
 		validateBlur();
 };
 	
@@ -129,19 +129,19 @@ var checkPwd = function(value){
 	
 var validateBlur = function(){
 	$("input,textarea,select").each(function(){
-	//获取文本对象
+	
 	var el = $(this),valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
-		//只校验含有check-type 属性的文本
+		
 		if(valid!==null && valid.length>0){
-			//为每个文本绑定获取焦点事件
+		
 			el.focus(function(){
 				var curTextDiv=el.parent(), curErrorEl = curTextDiv.children('.help-inline')
-				//判断当前DIV 是否有错误信息的class
+				
 				if(curErrorEl.hasClass('help-inline')){
 					curErrorEl.remove();
 				}	
 			});
-			el.blur(function() { // 失去焦点时
+			el.blur(function() { 
                 validateField(el, valid);
             });
 		}		
@@ -153,9 +153,9 @@ var validateForm=function(){
 	
 	 var validationError = false;
 	$("input,textarea,select").each(function(){
-	//获取文本对象
+	
 	var el = $(this),valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
-		//只校验含有check-type 属性的文本
+		
 		if(valid!==null && valid.length>0){
 			if(!validateField(el,valid)){
 				validationError=true;
@@ -168,11 +168,11 @@ var validateField = function(field,valid){
 	 var el = $(field), error = false, errorMsg = '',pwdStatus=0,elLength=el.val().length;
 	
 	
-		//循环校验 
+		
 	 var rules = defaults.validRules;
 		for(var i=0;i<rules.length;i++){
 			var rule = rules[i];
-			//验证规则判断
+		
 			if(valid==rule.name){
 				if(rule.name=='passWord'){
 					pwdStatus = rule.validate(el.val());
@@ -191,10 +191,10 @@ var validateField = function(field,valid){
 	if(!error){
 	
 	
-		//校验长度/是否含有异步请求函数
+		
 		var minMax = (el.attr('min-max')==undefined)?null:el.attr('min-max').split(' ');	
 		var _callBack = (el.attr('call-back')==undefined)?null:el.attr('call-back').split(' ');
-		//截取长度区间 进行比较"1-5"
+		
 		if(minMax!==null && minMax.length>0){
 			var min = el.attr('min-max').split('-')[0],max=el.attr('min-max').split('-')[1];
 			if(elLength < Number(min)){
@@ -216,9 +216,9 @@ var validateField = function(field,valid){
 	}
 	 
 	var curTextDiv=el.parent(), curErrorEl = curTextDiv.children('.help-inline');
-	//添加/删除 错误描述信息
+	
 	if(error){
-		//判断当前DIV 是否有错误信息的class
+		
 		if(curErrorEl.hasClass('help-inline')){
 			var overHelp = curErrorEl.text();
 			curTextDiv.data('help-inline',overHelp);
@@ -240,7 +240,7 @@ var validateField = function(field,valid){
 		curErrorEl.remove();
 		el.removeClass().addClass('right');
 	}
-	//验证不通过 返回 false 通过范围 true
+	
 	return !error;
 };
 
