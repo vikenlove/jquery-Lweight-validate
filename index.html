@@ -58,15 +58,26 @@ check-type：
 
 <h1>3:使用配置</h1>
 
-<pre>
-<code>
-<div>
-  用户名
-    <div>
-</div>
-</div>
-</code>
-</pre>
+<pre><code>&lt;form class="form-horizontal"&gt;
+    &lt;div class="control-group"&gt;
+        &lt;label class="control-label" for="inputEmail"&gt;邮箱&lt;/label&gt;
+        &lt;div class="controls"&gt;
+            &lt;input type="text" id="inputEmail" check-type="mail" mail-message="邮箱格式不正确！" &gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="control-group"&gt;
+        &lt;label class="control-label" for="inputPassword"&gt;密码&lt;/label&gt;
+        &lt;div class="controls"&gt;
+            &lt;input type="password" id="inputPassword" check-type="required" required-message="密码不能为空！" &gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="control-group"&gt;
+        &lt;div class="controls"&gt;
+            &lt;button type="submit" class="btn"&gt;登录&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+</code></pre>
 
 <h1>4：总结</h1>
 
