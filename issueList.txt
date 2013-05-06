@@ -1,6 +1,7 @@
 jquery-Lweight-validate
 ×÷Õß£º´óÃ¨
 http://vikenlove.github.io/jquery-Lweight-validate
+http://www.oschina.net/p/jquery-lweight-validate 
 =========================================================================================
 version 1.0.2
 jquery-Lweight-validate-beta.js 
