@@ -19,15 +19,15 @@
  * limitations under the License.
  * ========================================================= */
 (function($) {       
-$.fn.myValidate = function(btnId,callbacksuccess) {     
-     
-		$("#"+btnId).click(function(){
-			if(!validateForm()){
+$.fn.myValidate = function(callbacksuccess) { 
+		var $this = this;
+		$this.find('button[btn-type=true]').click(function(){
+			if(!validateForm($this)){
 				callbacksuccess();
 			}				
 		});
 		
-		validateBlur();
+		validateBlur($this);
 };
 	
    var defaults = {
@@ -91,16 +91,7 @@ var confirmPwd = function(value){
 	var inputObj = $("input[type='password']");
 	var pwd1 = $.trim(inputObj.eq(0).val());
 	var pwd2 = $.trim(inputObj.eq(1).val());
-	if(pwd2!=''){
-		if(pwd1 == pwd2){	
-			return false;
-		}else{
-			return true;
-		}
-	}else{
-		return true;
-	}
-	
+	return (pwd2.length > 0?(pwd1 == pwd2?false:true):true);	
 };
 	
 var checkPwd = function(value){
@@ -128,8 +119,8 @@ var checkPwd = function(value){
 
 
 	
-var validateBlur = function(){
-	$("input,textarea,select").each(function(){
+var validateBlur = function(obj){
+	$(obj).find("input,textarea,select").each(function(){
 	
 	var el = $(this),valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
 		
@@ -150,10 +141,10 @@ var validateBlur = function(){
 }		
 		
 		
-var validateForm=function(){
+var validateForm=function(obj){
 	
 	 var validationError = false;
-	$("input,textarea,select").each(function(){
+	$(obj).find("input,textarea,select").each(function(){
 	
 	var el = $(this),valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
 		
@@ -166,10 +157,7 @@ var validateForm=function(){
 	return validationError;
 };
 var validateField = function(field,valid){
-	 var el = $(field), error = false, errorMsg = '',pwdStatus=0,elLength=el.val().length;
-	
-	
-		
+	 var el = $(field), error = false, errorMsg = '',pwdStatus=0,elLength=el.val().length;		
 	 var rules = defaults.validRules;
 		for(var i=0;i<rules.length;i++){
 			var rule = rules[i];
@@ -194,7 +182,7 @@ var validateField = function(field,valid){
 	
 		
 		var minMax = (el.attr('min-max')==undefined)?null:el.attr('min-max').split(' ');	
-		var _callBack = (el.attr('call-back')==undefined)?null:el.attr('call-back').split(' ');
+		var _callBack = (el.attr('data-callback')==undefined)?null:el.attr('data-callback').split(' ');
 		
 		if(minMax!==null && minMax.length>0){
 			var min = el.attr('min-max').split('-')[0],max=el.attr('min-max').split('-')[1];
@@ -208,7 +196,7 @@ var validateField = function(field,valid){
 				}
 			}
 		}else if(_callBack!==null && _callBack.length>0){
-			var _ajaxCallBack = el.attr('call-back');
+			var _ajaxCallBack = el.attr('data-callback');
 			error = eval(_ajaxCallBack);
 			if(error){
 				errorMsg=(el.attr('call-message')==undefined)?"校验无法通过，请重新输入":el.attr('call-message');

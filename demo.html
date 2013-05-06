@@ -6,12 +6,12 @@
 <link href="Lweight.css" type="text/css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" media="screen" href="stylesheet.css">
 	<script src="jquery.js"></script> 
+	<!--<script src="jquery-Lweight-validate-min.js"></script>-->
 	<script src="jquery-Lweight-validate.js"></script>
-	
 	<script>
 
 		$(function(){		
-		$('#form').myValidate("subBtn",function(){
+		$('#form').myValidate(function(){
 				callbackFunction();
 			});						
 		});
@@ -56,7 +56,7 @@
 				<label class="control-label" for="inputName">用户名</label>
 				<div class="controls">
 					<input type="text" id="inputName" check-type="required" 
-					call-back="mycallback()" call-message="用户名名已存在"  required-message="用户名不能为空" >
+					data-callback="mycallback()" call-message="用户名名已存在"  required-message="用户名不能为空" >
 					</div>
 			</div>
 			
@@ -127,7 +127,9 @@
 			<div class="control-group">
 				<div class="controls">
 				
-				<button type="button" id="subBtn" class="btn btn-primary" data-toggle="button">Single Toggle</button>
+				<button type="button" id="subBtn" btn-type="true" class="btn btn-primary" data-toggle="button">保存</button>
+				<button type="button" id="resBtn" btn-type="true" class="btn btn-primary" data-toggle="button">提交审核</button>
+				<button type="button" id="resBtn" btn-type="false" class="btn btn-primary" data-toggle="button">返回</button>
 				</div>
 			</div>
 		</form>
