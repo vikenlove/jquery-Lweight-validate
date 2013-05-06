@@ -1,39 +1,7 @@
 jquery-Lweight-validate
 作者：大猫
 http://vikenlove.github.io/jquery-Lweight-validate
+开源轻量级校验框架：更新信息与BUG修复记录请查看issueList.txt文件
 =========================================================================================
-version 1.0.2
-jquery-Lweight-validate-beta.js 
-2013-05-06
-增加min 压缩版本
-完善确认密码判断
-增加btn-type自定义HTML标签
-参数包含：true & false ；true 为提交按钮,false 为普通按钮
-删除固定button 按钮ID绑定。修正为结合btn-type属性通过$('#form')绑定当前表单下所有按钮
-修改文本失去交单事件的自定义HTML标签名称： 避免属性名称混淆含义
-原：call-back 现：data-callback
 
-==========================================================================================
-
-version 1.0.1
-jquery-Lweight-validate-beta.js 
-2013-05-03
-增加文本失去焦点call-back函数配置
-增加CSS样式，美化页面CSS
-==========================================================================================
-version 1.0.0
-jquery-Lweight-validate-beta.js 
-2013-04-27  
-版本初始化：支持校验属性
-check-type：
-"required"：为空校验
-"min-max":字符长度校验
-"idCard"：身份证号码
-"mail"：邮箱地址
-"passWord"：密码长度与强度
-"confirmPwd"：密码确认
-"mobile"：手机号码
-"dateYmd"：日期格式（YYYY-MM-DD）
-"call-back"：文本失去焦点回调
-==========================================================================================
 
