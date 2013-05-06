@@ -4,7 +4,8 @@
  * Updated by 大猫 
  * version 1.0.2 beta
  * =========================================================
- *
+ * http://vikenlove.github.io/jquery-Lweight-validate
+ * http://www.oschina.net/p/jquery-lweight-validate 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
