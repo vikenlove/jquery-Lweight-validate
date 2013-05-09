@@ -2,7 +2,7 @@
  * jquery-Lightweight-validation.js 
  * Original Idea: (Copyright 2013 Stefan Petre)
  * Updated by 大猫 
- * version 1.0.3 beta
+ * version 1.0.2 beta
  * =========================================================
  * http://vikenlove.github.io/jquery-Lweight-validate
  * http://www.oschina.net/p/jquery-lweight-validate 
@@ -235,7 +235,7 @@ var validateField = function(field,valid){
 		}else{
 			curTextDiv.append('<span class="help-inline error">'+errorMsg+'</span>');
 		}
-		el.removeClass().addClass('error');
+		el.removeClass('right').addClass('error');
 		
 	}else if(pwdStatus > 0){
 		var pwdStrong = passWordStatus(pwdStatus);
@@ -245,10 +245,10 @@ var validateField = function(field,valid){
 			}else{
 				curTextDiv.append('<span class="help-inline '+classpic+'">'+pwdStrong+'</span>');
 		}
-		el.removeClass().addClass('right');	
+		el.removeClass('error').addClass('right');	
 	}else{
 		curErrorEl.remove();
-		el.removeClass().addClass('right');
+		el.removeClass('error').addClass('right');
 	}
 	
 	return !error;
