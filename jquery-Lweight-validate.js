@@ -24,13 +24,16 @@
 		$this.find('button[btn-type=true]').click(function(){
 				validateClick($this,callbacksuccess);
 		});
-		$(window).keydown(function(event){
-		  switch(event.keyCode) {
-			case 13:
-				validateClick($this,callbacksuccess);
-				break; 
-			}
-		});
+		var keyDown = ($this.attr('form-key')==undefined||$this.attr('form-key')=='false')?false:true;
+		if(keyDown){
+			$(window).keydown(function(event){
+			  switch(event.keyCode) {
+				case 13:
+					validateClick($this,callbacksuccess);
+					break; 
+				}
+			});
+		};	
 		validateBlur($this);
 };
 	var validateClick = function(obj,callbacksuccess){
@@ -99,19 +102,19 @@ var checkDate = function(value){
 
 	
 var confirmPwd = function(value) {
-       var inputObj = $("input[type='password']");
-       var pwd1="",pwd2="";
-       if(inputObj.size()==3){
-           pwd1 = $.trim(inputObj.eq(1).val());
-           pwd2 = $.trim(inputObj.eq(2).val());
-       }else{
-           pwd1 = $.trim(inputObj.eq(0).val());
-           pwd2 = $.trim(inputObj.eq(1).val());
-       }
-       return (pwd2.length > 0?(pwd1 == pwd2?false:true):true);    
- };
+    var inputObj = $("input[type='password']");
+    var pwd1="",pwd2="";
+    if(inputObj.size()==3){
+        pwd1 = $.trim(inputObj.eq(1).val());
+        pwd2 = $.trim(inputObj.eq(2).val());
+    }else{
+        pwd1 = $.trim(inputObj.eq(0).val());
+        pwd2 = $.trim(inputObj.eq(1).val());
+    }
+    return (pwd2.length > 0?(pwd1 == pwd2?false:true):true);    
+};
 
-	
+
 var checkPwd = function(value){
 	if(value.length >= 6 )
 	{		
