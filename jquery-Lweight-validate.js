@@ -2,7 +2,7 @@
  * jquery-Lightweight-validation.js 
  * Original Idea: (Copyright 2013 Stefan Petre)
  * Updated by 大猫 
- * version 1.0.3 beta
+ * version 1.0.2 beta
  * =========================================================
  * http://vikenlove.github.io/jquery-Lweight-validate
  * http://www.oschina.net/p/jquery-lweight-validate 
@@ -19,26 +19,27 @@
  * limitations under the License.
  * ========================================================= */
 (function($) {       
-$.fn.myValidate = function(callbacksuccess) { 
+	$.fn.myValidate = function(callbacksuccess) { 
 		var $this = this;
 		$this.find('button[btn-type=true]').click(function(){
-				validateClick($this);
+				validateClick($this,callbacksuccess);
 		});
 		$(window).keydown(function(event){
 		  switch(event.keyCode) {
 			case 13:
-				validateClick($this);
+				validateClick($this,callbacksuccess);
 				break; 
 			}
 		});
 		validateBlur($this);
 };
-	var validateClick = function(obj){
+	var validateClick = function(obj,callbacksuccess){
 		if(!validateForm(obj)){
-					callbacksuccess();
+			if(callbacksuccess != undefined){
+				callbacksuccess();
+			}	
 		}	
-	};	
-	
+	};
 	
    var defaults = {
         validRules : [
@@ -59,10 +60,10 @@ var city={11:"北京",12:"天津",13:"河北",14:"山西",15:"内蒙古",21:"辽
 			23:"黑龙江",31:"上海",32:"江苏",33:"浙江",34:"安徽",35:"福建",36:"江西",37:"山东",
 			41:"河南",42:"湖北",43:"湖南",44:"广东",45:"广西",46:"海南",50:"重庆",51:"四川",
 			52:"贵州",53:"云南",54:"西藏",61:"陕西",62:"甘肃",63:"青海",64:"宁夏",
-			65:"新疆",71:"台湾",81:"香港",82:"澳门",91:"国外"} 	
+			65:"新疆",71:"台湾",81:"香港",82:"澳门",91:"国外"}; 	
 	
 var checkIdCard = function(value){ 
-	var iSum=0,info="",birthday;
+	var iSum=0,birthday;
 	if(!/^\d{17}(\d|x)$/i.test(value)){
 		return true; 
 	} 
@@ -82,7 +83,7 @@ var checkIdCard = function(value){
 		return true;
 	} 
 	return false;
-} 
+}; 
 	
 	
 	
@@ -94,7 +95,7 @@ var checkDate = function(value){
 		if(r==null)return true; 
 	var d= new Date(r[1], r[3]-1, r[4]); 
 		return !(d.getFullYear()==r[1]&&(d.getMonth()+1)==r[3]&&d.getDate()==r[4]);
-}
+};
 
 	
 var confirmPwd = function(value){
@@ -137,7 +138,7 @@ var validateBlur = function(obj){
 		if(valid!==null && valid.length>0){
 		
 			el.focus(function(){
-				var curTextDiv=el.parent(), curErrorEl = curTextDiv.children('.help-inline')
+				var curTextDiv=el.parent(), curErrorEl = curTextDiv.children('.help-inline');
 				
 				if(curErrorEl.hasClass('help-inline')){
 					curErrorEl.remove();
@@ -148,7 +149,7 @@ var validateBlur = function(obj){
             });
 		}		
 	});
-}		
+};		
 		
 		
 var validateForm=function(obj){
@@ -257,7 +258,7 @@ var classStatus = function(i){
 			break;	
 	}
 	return status;
-}
+};
 
 var passWordStatus = function(i){
 	var status ='';
@@ -273,6 +274,6 @@ var passWordStatus = function(i){
 			break;	
 	}
 	return status;
-}
+};
      
 })(jQuery);   
