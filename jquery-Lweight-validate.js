@@ -2,7 +2,7 @@
  * jquery-Lightweight-validation.js 
  * Original Idea: (Copyright 2013 Stefan Petre)
  * Updated by 大猫 
- * version 1.0.2 beta
+ * version 1.0.3 beta
  * =========================================================
  * http://vikenlove.github.io/jquery-Lweight-validate
  * http://www.oschina.net/p/jquery-lweight-validate 
@@ -98,12 +98,19 @@ var checkDate = function(value){
 };
 
 	
-var confirmPwd = function(value){
-	var inputObj = $("input[type='password']");
-	var pwd1 = $.trim(inputObj.eq(0).val());
-	var pwd2 = $.trim(inputObj.eq(1).val());
-	return (pwd2.length > 0?(pwd1 == pwd2?false:true):true);	
-};
+var confirmPwd = function(value) {
+       var inputObj = $("input[type='password']");
+       var pwd1="",pwd2="";
+       if(inputObj.size()==3){
+           pwd1 = $.trim(inputObj.eq(1).val());
+           pwd2 = $.trim(inputObj.eq(2).val());
+       }else{
+           pwd1 = $.trim(inputObj.eq(0).val());
+           pwd2 = $.trim(inputObj.eq(1).val());
+       }
+       return (pwd2.length > 0?(pwd1 == pwd2?false:true):true);    
+ };
+
 	
 var checkPwd = function(value){
 	if(value.length >= 6 )
