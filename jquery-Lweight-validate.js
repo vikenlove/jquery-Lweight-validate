@@ -22,13 +22,23 @@
 $.fn.myValidate = function(callbacksuccess) { 
 		var $this = this;
 		$this.find('button[btn-type=true]').click(function(){
-			if(!validateForm($this)){
-				callbacksuccess();
-			}				
+				validateClick($this);
 		});
-		
+		$(window).keydown(function(event){
+		  switch(event.keyCode) {
+			case 13:
+				validateClick($this);
+				break; 
+			}
+		});
 		validateBlur($this);
 };
+	var validateClick = function(obj){
+		if(!validateForm(obj)){
+					callbacksuccess();
+		}	
+	};	
+	
 	
    var defaults = {
         validRules : [
