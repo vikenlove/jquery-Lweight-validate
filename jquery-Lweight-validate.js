@@ -116,7 +116,7 @@ var confirmPwd = function(value) {
 
 
 var checkPwd = function(value){
-	if(value.length >= 6 )
+	if(value.length >= 6 && value.length<=16)
 	{		
 		if(/[a-zA-Z]+/.test(value) && /[0-9]+/.test(value) && /\W+\D+/.test(value)) {
 				return 1;
