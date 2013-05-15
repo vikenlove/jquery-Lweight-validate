@@ -2,7 +2,7 @@
  * jquery-Lightweight-validation.js 
  * Original Idea: (Copyright 2013 Stefan Petre)
  * Updated by 大猫 
- * version 1.0.2 beta
+ * version 1.0.4 beta
  * =========================================================
  * http://vikenlove.github.io/jquery-Lweight-validate
  * http://www.oschina.net/p/jquery-lweight-validate 
@@ -47,6 +47,7 @@
    var defaults = {
         validRules : [
             {name: 'required', validate: function(value) {return ($.trim(value) == '');}, defaultMsg: '请输入内容。'},
+			{name: 'unRequired', validate: function(value) {return false;}, defaultMsg: '请输入内容。'},
             {name: 'number', validate: function(value) {return (!/^[0-9]\d*$/.test(value));}, defaultMsg: '请输入数字。'},
             {name: 'mail', validate: function(value) {return (!/^[a-zA-Z0-9]{1}([\._a-zA-Z0-9-]+)(\.[_a-zA-Z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+){1,3}$/.test(value));}, defaultMsg: '请输入邮箱地址。'},
             {name: 'char', validate: function(value) {return (!/^[a-z\_\-A-Z]*$/.test(value));}, defaultMsg: '请输入英文字符。'},
@@ -178,7 +179,8 @@ var validateForm=function(obj){
 	return validationError;
 };
 var validateField = function(field,valid){
-	 var el = $(field), error = false, errorMsg = '',pwdStatus=0,elLength=el.val().length;		
+	 var el = $(field), error = false,isNonFlag=false, errorMsg = '',pwdStatus=0,elLength=el.val().length;	
+	 var isNon = (el.attr('non-required')==undefined||el.attr('non-required')=='false')?false:true;
 	 var rules = defaults.validRules;
 		for(var i=0;i<rules.length;i++){
 			var rule = rules[i];
@@ -191,6 +193,16 @@ var validateField = function(field,valid){
 						errorMsg=(el.attr('required-message')==undefined)?rule.defaultMsg:el.attr('required-message');
 					}
 					break;
+				}else if(isNon){
+					if($.trim(el.val()).length > 0){
+						if(rule.validate(el.val())){
+							error=true;
+							errorMsg=(el.attr('required-message')==undefined)?rule.defaultMsg:el.attr('required-message');
+							break;
+						}else{
+							isNonFlag=true;
+						}
+					}
 				}else if(rule.validate(el.val())){
 					error=true;
 					errorMsg=(el.attr('required-message')==undefined)?rule.defaultMsg:el.attr('required-message');
@@ -200,29 +212,32 @@ var validateField = function(field,valid){
 		}
 	if(!error){
 	
-	
-		
-		var minMax = (el.attr('min-max')==undefined)?null:el.attr('min-max').split(' ');	
-		var _callBack = (el.attr('data-callback')==undefined)?null:el.attr('data-callback').split(' ');
-		
-		if(minMax!==null && minMax.length>0){
-			var min = el.attr('min-max').split('-')[0],max=el.attr('min-max').split('-')[1];
-			if(elLength < Number(min)){
-				error=true;
-				errorMsg=(el.attr('min-message')==undefined)?"文本长度不能小于"+min+"个字符":el.attr('min-message');
-			}else if(max != undefined){
-				if(elLength >= Number(max)){
+		if(el.val().length >0){
+			var minMax = (el.attr('min-max')==undefined)?null:el.attr('min-max').split(' ');	
+			var _callBack = (el.attr('data-callback')==undefined)?null:el.attr('data-callback').split(' ');
+			
+			if(minMax!==null && minMax.length>0){
+				var min = el.attr('min-max').split('-')[0],max=el.attr('min-max').split('-')[1];
+				if(elLength < Number(min)){
 					error=true;
-					errorMsg=(el.attr('max-message')==undefined)?"文本长度不能大于"+max+"个字符":el.attr('max-message');
+					errorMsg=(el.attr('min-message')==undefined)?"文本长度不能小于"+min+"个字符":el.attr('min-message');
+				}else if(max != undefined){
+					if(elLength >= Number(max)){
+						error=true;
+						errorMsg=(el.attr('max-message')==undefined)?"文本长度不能大于"+max+"个字符":el.attr('max-message');
+					}
+				}else{
+					isNonFlag=true;
 				}
-			}
-		}else if(_callBack!==null && _callBack.length>0){
-			var _ajaxCallBack = el.attr('data-callback');
-			error = eval(_ajaxCallBack);
-			if(error){
-				errorMsg=(el.attr('call-message')==undefined)?"校验无法通过，请重新输入":el.attr('call-message');
-			}
+			}else if(_callBack!==null && _callBack.length>0){
+				var _ajaxCallBack = el.attr('data-callback');
+				error = eval(_ajaxCallBack);
+				if(error){
+					errorMsg=(el.attr('call-message')==undefined)?"校验无法通过，请重新输入":el.attr('call-message');
+				}
+			}	
 		}	
+		
 	}
 	 
 	var curTextDiv=el.parent(), curErrorEl = curTextDiv.children('.help-inline');
@@ -248,7 +263,7 @@ var validateField = function(field,valid){
 		el.removeClass('error').addClass('right');	
 	}else{
 		curErrorEl.remove();
-		el.removeClass('error').addClass('right');
+		isNonFlag==true?el.removeClass('error').addClass('right'):el.removeClass('error').removeClass('right');	
 	}
 	
 	return !error;
