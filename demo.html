@@ -39,15 +39,21 @@
       <section id="main_content" class="inner">
 	 	<h1>jquery-Lweight-validation.js </h1>
 	 
-		<form id="form" class="form-horizontal">
-		
+		<form id="form" class="form-horizontal" form-key="true">
+			<div class="control-group">
+				<label class="control-label" for="inputtext">数字</label>
+				<div class="controls">
+					<input type="text" id="inputtext" check-type="number" non-required='true'>
+						
+				</div>
+			</div>
 			<div class="control-group">
 				<label class="control-label" for="inputtext">文本</label>
 				<div class="controls">
-					<input type="text" id="inputtext" check-type="required"
+					<input type="text" id="inputtext" check-type="unRequired"
 						min-max="3-5" min-message="字符长度不得小于3个字符" 
 						max-message="字符长度不得超过5个字符"  
-						required-message="文本不能为空！">
+						required-message="文本不能为空！"  >
 						
 				</div>
 			</div>
@@ -95,7 +101,7 @@
 			<div class="control-group">
 				<label class="control-label" for="inputMobile">手机号码</label>
 				<div class="controls">
-					<input type="text" id="inputMobile" check-type="mobile" required-message="请输入11位正确手机号码！" >
+					<input type="text" id="inputMobile" check-type="mobile" non-required='true' required-message="请输入11位正确手机号码！" >
 				</div>
 			</div>
 			<div class="control-group">
