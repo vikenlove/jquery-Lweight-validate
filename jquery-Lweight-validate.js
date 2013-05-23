@@ -2,7 +2,7 @@
  * jquery-Lightweight-validation.js 
  * Original Idea: (Copyright 2013 Stefan Petre)
  * Updated by 大猫 
- * version 1.0.4 beta
+ * version 1.0.5 beta
  * =========================================================
  * http://vikenlove.github.io/jquery-Lweight-validate
  * http://www.oschina.net/p/jquery-lweight-validate 
@@ -18,24 +18,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ========================================================= */
-(function($) {       
-	$.fn.myValidate = function(callbacksuccess) { 
+!(function($) {     
+	var globalOptions = {},options={formCall:function(){},isAlert:false,alterCall:function(orgs){},formKey:false};
+	$.fn.myValidate = function(options) {
+		globalOptions = $.extend({}, $.fn.myValidate.defaults, options);
 		var $this = this;
 		$this.find('button[btn-type=true]').click(function(){
-				validateClick($this,callbacksuccess);
+				validateClick($this,globalOptions.formCall);
 		});
-		var keyDown = ($this.attr('form-key')==undefined||$this.attr('form-key')=='false')?false:true;
-		if(keyDown){
-			$(window).keydown(function(event){
+		if(globalOptions.formKey){
+			$(document).keyup(function(event){
 			  switch(event.keyCode) {
 				case 13:
-					validateClick($this,callbacksuccess);
+					validateClick($this,globalOptions.formCall);
 					break; 
 				}
 			});
-		};	
-		validateBlur($this);
+		};
+			validateBlur($this);
 };
+
+
 	var validateClick = function(obj,callbacksuccess){
 		if(!validateForm(obj)){
 			if(callbacksuccess != undefined){
@@ -44,7 +47,7 @@
 		}	
 	};
 	
-   var defaults = {
+   $.fn.myValidate.defaults = {
         validRules : [
             {name: 'required', validate: function(value) {return ($.trim(value) == '');}, defaultMsg: '请输入内容。'},
 			{name: 'unRequired', validate: function(value) {return false;}, defaultMsg: '请输入内容。'},
@@ -66,6 +69,150 @@ var city={11:"北京",12:"天津",13:"河北",14:"山西",15:"内蒙古",21:"辽
 			52:"贵州",53:"云南",54:"西藏",61:"陕西",62:"甘肃",63:"青海",64:"宁夏",
 			65:"新疆",71:"台湾",81:"香港",82:"澳门",91:"国外"}; 	
 	
+var validateBlur = function(obj){
+	$(obj).find("input,textarea,select").each(function(){
+	
+	var el = $(this),valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
+		
+		if(valid!==null && valid.length>0){
+		
+			el.focus(function(){
+				var curTextDiv=el.parent(), curErrorEl = curTextDiv.children('.help-inline');
+				
+				if(curErrorEl.hasClass('help-inline')){
+					curErrorEl.remove();
+				}	
+			});
+			el.blur(function() { 
+                validateField(el, valid);
+            });
+		}			
+	});
+		
+};		
+		
+		
+var validateForm=function(obj){
+	
+	 var validationError = false;
+	$(obj).find("input,textarea,select").each(function(){
+	
+	var el = $(this),valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
+		
+		if(valid!==null && valid.length>0){
+			if(!validateField(el,valid)){
+				validationError=true;
+			}
+		}
+		if(globalOptions.isAlert){
+			if(validationError){
+				return false;
+			}				
+		}		
+	});
+	return validationError;
+};
+var validateField = function(field,valid){
+	 var el = $(field), error = false,isNonFlag=false, errorMsg = '',pwdStatus=0,elLength=el.val().length;	
+	
+	 var isNon = (el.attr('non-required')==undefined||el.attr('non-required')=='false')?false:true;
+	 var rules = globalOptions.validRules;
+		for(var i=0;i<rules.length;i++){
+			var rule = rules[i];
+		
+			if(valid==rule.name){
+				if(rule.name=='passWord'){
+					pwdStatus = rule.validate(el.val());
+					if(pwdStatus == -1){
+						error=true;
+						errorMsg=(el.attr('required-message')==undefined)?rule.defaultMsg:el.attr('required-message');
+					}
+					break;
+				}else if(isNon){
+					if($.trim(el.val()).length > 0){
+						if(rule.validate(el.val())){
+							error=true;
+							errorMsg=(el.attr('required-message')==undefined)?rule.defaultMsg:el.attr('required-message');
+							break;
+						}else{
+							isNonFlag=true;
+						}
+					}
+				}else if(rule.validate(el.val())){
+					error=true;
+					errorMsg=(el.attr('required-message')==undefined)?rule.defaultMsg:el.attr('required-message');
+					break;
+				}				
+			}
+		}
+	if(!error){
+	
+		if(el.val().length >0){
+			var minMax = (el.attr('min-max')==undefined)?null:el.attr('min-max').split(' ');	
+			var _callBack = (el.attr('data-callback')==undefined)?null:el.attr('data-callback').split(' ');
+			
+			if(minMax!==null && minMax.length>0){
+				var min = el.attr('min-max').split('-')[0],max=el.attr('min-max').split('-')[1];
+				if(elLength < Number(min)){
+					error=true;
+					errorMsg=(el.attr('min-message')==undefined)?"文本长度不能小于"+min+"个字符":el.attr('min-message');
+				}else if(max != undefined){
+					if(elLength >= Number(max)){
+						error=true;
+						errorMsg=(el.attr('max-message')==undefined)?"文本长度不能大于"+max+"个字符":el.attr('max-message');
+					}
+				}else{
+					isNonFlag=true;
+				}
+			}else if(_callBack!==null && _callBack.length>0){
+				var _ajaxCallBack = el.attr('data-callback');
+				error = eval(_ajaxCallBack);
+				if(error){
+					errorMsg=(el.attr('call-message')==undefined)?"校验无法通过，请重新输入":el.attr('call-message');
+				}
+			}	
+		}	
+		
+	}
+	 
+	var curTextDiv=el.parent(), curErrorEl = curTextDiv.children('.help-inline');
+	
+	if(error){
+		if(globalOptions.isAlert){
+			if(globalOptions.alterCall != undefined){
+				globalOptions.alterCall(errorMsg);	
+			}else{
+				alert(errorMsg);				
+			}	
+		}else{
+			if(curErrorEl.hasClass('help-inline')){
+				var overHelp = curErrorEl.text();
+				curTextDiv.data('help-inline',overHelp);
+			}else{
+				curTextDiv.append('<span class="help-inline error">'+errorMsg+'</span>');
+			}
+			el.removeClass('right').addClass('error');
+		}
+	}else if(pwdStatus > 0){
+	
+		var pwdStrong = passWordStatus(pwdStatus);
+		var classpic = classStatus(pwdStatus);
+		if(curErrorEl.hasClass('help-inline')){
+				curTextDiv.data('help-inline',pwdStrong);
+			}else{
+				curTextDiv.append('<span class="help-inline '+classpic+'">'+pwdStrong+'</span>');
+		}
+		el.removeClass('error').addClass('right');	
+		
+	}else{
+		if(!globalOptions.isAlert){
+			curErrorEl.remove();
+			isNonFlag==true?el.removeClass('error').addClass('right'):el.removeClass('error').removeClass('right');	
+		}
+	}
+	
+	return !error;
+};
 var checkIdCard = function(value){ 
 	var iSum=0,birthday;
 	if(!/^\d{17}(\d|x)$/i.test(value)){
@@ -135,138 +282,6 @@ var checkPwd = function(value){
 	}else{
 		return -1;
 	}
-};
-
-
-
-
-	
-var validateBlur = function(obj){
-	$(obj).find("input,textarea,select").each(function(){
-	
-	var el = $(this),valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
-		
-		if(valid!==null && valid.length>0){
-		
-			el.focus(function(){
-				var curTextDiv=el.parent(), curErrorEl = curTextDiv.children('.help-inline');
-				
-				if(curErrorEl.hasClass('help-inline')){
-					curErrorEl.remove();
-				}	
-			});
-			el.blur(function() { 
-                validateField(el, valid);
-            });
-		}		
-	});
-};		
-		
-		
-var validateForm=function(obj){
-	
-	 var validationError = false;
-	$(obj).find("input,textarea,select").each(function(){
-	
-	var el = $(this),valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
-		
-		if(valid!==null && valid.length>0){
-			if(!validateField(el,valid)){
-				validationError=true;
-			}
-		}		
-	});
-	return validationError;
-};
-var validateField = function(field,valid){
-	 var el = $(field), error = false,isNonFlag=false, errorMsg = '',pwdStatus=0,elLength=el.val().length;	
-	 var isNon = (el.attr('non-required')==undefined||el.attr('non-required')=='false')?false:true;
-	 var rules = defaults.validRules;
-		for(var i=0;i<rules.length;i++){
-			var rule = rules[i];
-		
-			if(valid==rule.name){
-				if(rule.name=='passWord'){
-					pwdStatus = rule.validate(el.val());
-					if(pwdStatus == -1){
-						error=true;
-						errorMsg=(el.attr('required-message')==undefined)?rule.defaultMsg:el.attr('required-message');
-					}
-					break;
-				}else if(isNon){
-					if($.trim(el.val()).length > 0){
-						if(rule.validate(el.val())){
-							error=true;
-							errorMsg=(el.attr('required-message')==undefined)?rule.defaultMsg:el.attr('required-message');
-							break;
-						}else{
-							isNonFlag=true;
-						}
-					}
-				}else if(rule.validate(el.val())){
-					error=true;
-					errorMsg=(el.attr('required-message')==undefined)?rule.defaultMsg:el.attr('required-message');
-					break;
-				}				
-			}
-		}
-	if(!error){
-	
-		if(el.val().length >0){
-			var minMax = (el.attr('min-max')==undefined)?null:el.attr('min-max').split(' ');	
-			var _callBack = (el.attr('data-callback')==undefined)?null:el.attr('data-callback').split(' ');
-			
-			if(minMax!==null && minMax.length>0){
-				var min = el.attr('min-max').split('-')[0],max=el.attr('min-max').split('-')[1];
-				if(elLength < Number(min)){
-					error=true;
-					errorMsg=(el.attr('min-message')==undefined)?"文本长度不能小于"+min+"个字符":el.attr('min-message');
-				}else if(max != undefined){
-					if(elLength >= Number(max)){
-						error=true;
-						errorMsg=(el.attr('max-message')==undefined)?"文本长度不能大于"+max+"个字符":el.attr('max-message');
-					}
-				}else{
-					isNonFlag=true;
-				}
-			}else if(_callBack!==null && _callBack.length>0){
-				var _ajaxCallBack = el.attr('data-callback');
-				error = eval(_ajaxCallBack);
-				if(error){
-					errorMsg=(el.attr('call-message')==undefined)?"校验无法通过，请重新输入":el.attr('call-message');
-				}
-			}	
-		}	
-		
-	}
-	 
-	var curTextDiv=el.parent(), curErrorEl = curTextDiv.children('.help-inline');
-	
-	if(error){
-		
-		if(curErrorEl.hasClass('help-inline')){
-			var overHelp = curErrorEl.text();
-			curTextDiv.data('help-inline',overHelp);
-		}else{
-			curTextDiv.append('<span class="help-inline error">'+errorMsg+'</span>');
-		}
-		el.removeClass('right').addClass('error');
-		
-	}else if(pwdStatus > 0){
-		var pwdStrong = passWordStatus(pwdStatus);
-		var classpic = classStatus(pwdStatus);
-		if(curErrorEl.hasClass('help-inline')){
-				curTextDiv.data('help-inline',pwdStrong);
-			}else{
-				curTextDiv.append('<span class="help-inline '+classpic+'">'+pwdStrong+'</span>');
-		}
-		el.removeClass('error').addClass('right');	
-	}else{
-		curErrorEl.remove();
-		isNonFlag==true?el.removeClass('error').addClass('right'):el.removeClass('error').removeClass('right');	
-	}
-	
-	return !error;
 };
 
 var classStatus = function(i){
