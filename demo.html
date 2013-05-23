@@ -11,13 +11,21 @@
 	<script>
 
 		$(function(){		
-		$('#form').myValidate(function(){
-				callbackFunction();
+		$('#form').myValidate(
+			{
+				formCall:function(){formCallFunction();},
+				isAlert:true,
+				formKey:false,
+				alterCall:function(msg){callbackFunction(msg);}			
 			});						
 		});
 		
-		function callbackFunction(){
-			alert("回调函数");
+		function formCallFunction(){
+			alert("回调函数:");
+		}	
+		
+		function callbackFunction(msg){
+			alert("alert:"+msg);
 		}	
 		function mycallback(){
 			if($("#inputName").val()=="viken"){
@@ -26,7 +34,6 @@
 				return false;
 			}
 		}
-		
 		
 	</script>
 	
