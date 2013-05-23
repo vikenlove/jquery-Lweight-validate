@@ -3,6 +3,14 @@ jquery-Lweight-validate
 http://vikenlove.github.io/jquery-Lweight-validate
 http://www.oschina.net/p/jquery-lweight-validate 
 =========================================================================================
+version 1.0.5
+jquery-Lweight-validate-beta.js 
+2013-05-23
+修复回车事件IE不兼容问题
+新增支持alert提示。新增自定义alert事件方式。
+调整配置方式。
+去掉form-key自定义HTML属性。改为JSON参数传入
+=========================================================================================
 version 1.0.4
 jquery-Lweight-validate-beta.js 
 2013-05-16
