@@ -2,7 +2,7 @@
  * jquery-Lightweight-validation.js 
  * Original Idea: (Copyright 2013 Stefan Petre)
  * Updated by 大猫 
- * version 1.0.5 beta
+ * version 1.0.6 beta
  * =========================================================
  * http://vikenlove.github.io/jquery-Lweight-validate
  * http://www.oschina.net/p/jquery-lweight-validate 
@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ========================================================= */
-!(function($) {     
+;(function($) {     
 	var globalOptions = {},options={formCall:function(){},isAlert:false,alterCall:function(orgs){},formKey:false};
 	$.fn.myValidate = function(options) {
 		globalOptions = $.extend({}, $.fn.myValidate.defaults, options);
@@ -59,7 +59,8 @@
 			{name: 'passWord', validate: function(value) {return checkPwd($.trim(value));}, defaultMsg: '密码长度必须在6~16之间。'},
 			{name: 'confirmPwd', validate: function(value) {return confirmPwd(value);}, defaultMsg: '两次密码不一致'},
 			{name: 'dateYmd', validate: function(value) {return checkDate(value);}, defaultMsg: '请输入YYYY--MM--DD格式'},
-			{name: 'idCard', validate: function(value) {return checkIdCard(value);}, defaultMsg: '请输入正确的身份证号码'}
+			{name: 'idCard', validate: function(value) {return checkIdCard(value);}, defaultMsg: '请输入正确的身份证号码'},
+			{name: 'dateCompare', validate: function(value) {return dateCompare();}, defaultMsg: '起始日期不能大于结束日期'}
         ]
     };
 
@@ -237,7 +238,17 @@ var checkIdCard = function(value){
 }; 
 	
 	
+var dateCompare = function(){
+	var $this = $("input[check-type='dateCompare']"),flag=false;
 	
+	if($this.eq(0).val().length >0 && $this.eq(1).val().length >0){
+		if($this.eq(0).val()!=$this.eq(1).val()){
+			var startDate = Number($this.eq(0).val().replace(/-/g,'')),endDate=Number($this.eq(1).val().replace(/-/g,''));	
+			flag = startDate < endDate?false:true;
+		}
+	}
+	return flag;
+};
 	
 	
 	
