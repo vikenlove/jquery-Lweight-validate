@@ -10,6 +10,7 @@ jquery-Lweight-validate-beta.js
 新增支持alert提示。新增自定义alert事件方式。
 调整配置方式。
 去掉form-key自定义HTML属性。改为JSON参数传入
+新增起始日期，结束日期对比校验
 =========================================================================================
 version 1.0.4
 jquery-Lweight-validate-beta.js 
