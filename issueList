@@ -3,6 +3,13 @@ jquery-Lweight-validate
 http://vikenlove.github.io/jquery-Lweight-validate
 http://www.oschina.net/p/jquery-lweight-validate 
 =========================================================================================
+version 1.0.6
+jquery-Lweight-validate-beta.js 
+2013-05-27
+修复json变量全文覆盖问题
+修复多表单情况下，回调函数无法相应问题
+注:多表单下，表单需要用div间隔
+=========================================================================================
 version 1.0.5
 jquery-Lweight-validate-beta.js 
 2013-05-23
