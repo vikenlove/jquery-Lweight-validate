@@ -20,7 +20,7 @@
     <header>
       <div class="inner">
         <h1>Jquery-lweight-validate</h1>
-        <h2>jquery-Lweight-validate-beta.js </h2>
+        <h2>jquery-Lweight-validate.js </h2>
         <a href="https://github.com/vikenlove/jquery-Lweight-validate" class="button"><small>View project on</small>GitHub</a>
       </div>
     </header>
@@ -37,10 +37,16 @@
 
 <p>引入jquery.js， Lweight.css，stylesheet.css，jquery-Lweight-validate.js ，pwd_sprite.png </p>
 
-<pre><code>$('#form').myValidate(options);</code></pre>
+<pre><code>
+$('#form').myValidate({
+                formCall:function(){formCallFunction();},
+                isAlert:false,
+                formKey:true,
+                alterCall:function(msg){callbackFunction(msg);}            
+            });
 
-<h1>2:现支持校验属性</h1>
-
+</code></pre>
+# 2:现支持校验属性
 <pre>
 <code>
 check-type：
@@ -56,6 +62,10 @@ check-type：
 other：
 "data-callback"：文本失去焦点回调
 "non-required"  固定格式文本中，非必填写，若填写，必须校验文本格式
+options：  formCall：表单提交函数
+isAlert：是否启用alter提示
+formKey：是否启用键盘回车时间
+alterCall：自定义alter函数
 </code>
 </pre>
 
