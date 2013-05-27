@@ -1,8 +1,8 @@
 /* =========================================================
  * jquery-Lightweight-validation.js 
- * Original Idea: (Copyright 2013 Stefan Petre)
+ * Original Idea: (Copyright 2013 Viken)
  * Updated by 大猫 
- * version 1.0.5 beta
+ * version 1.0.6
  * =========================================================
  * http://vikenlove.github.io/jquery-Lweight-validate
  * http://www.oschina.net/p/jquery-lweight-validate 
@@ -18,31 +18,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ========================================================= */
-;(function($) {     
-	var globalOptions = {},options={formCall:function(){},isAlert:false,alterCall:function(orgs){},formKey:false};
+;(function($) {     	
 	$.fn.myValidate = function(options) {
-		globalOptions = $.extend({}, $.fn.myValidate.defaults, options);
+	var globalOptions  = $.extend({}, $.fn.myValidate.defaults, options);
 		var $this = this;
 		$this.find('button[btn-type=true]').click(function(){
-				validateClick($this,globalOptions.formCall);
+				validateClick($this,globalOptions);
 		});
 		if(globalOptions.formKey){
 			$(document).keyup(function(event){
 			  switch(event.keyCode) {
 				case 13:
-					validateClick($this,globalOptions.formCall);
+					validateClick($this,globalOptions);
 					break; 
 				}
 			});
 		};
-			validateBlur($this);
+			validateBlur($this,globalOptions);
 };
 
 
-	var validateClick = function(obj,callbacksuccess){
-		if(!validateForm(obj)){
-			if(callbacksuccess != undefined){
-				callbacksuccess();
+	var validateClick = function(obj,globalOptions){
+		if(!validateForm(obj,globalOptions)){
+			if(globalOptions.formCall != undefined){
+				globalOptions.formCall();
 			}	
 		}	
 	};
@@ -70,7 +69,7 @@ var city={11:"北京",12:"天津",13:"河北",14:"山西",15:"内蒙古",21:"辽
 			52:"贵州",53:"云南",54:"西藏",61:"陕西",62:"甘肃",63:"青海",64:"宁夏",
 			65:"新疆",71:"台湾",81:"香港",82:"澳门",91:"国外"}; 	
 	
-var validateBlur = function(obj){
+var validateBlur = function(obj,globalOptions){
 	$(obj).find("input,textarea,select").each(function(){
 	
 	var el = $(this),valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
@@ -85,15 +84,13 @@ var validateBlur = function(obj){
 				}	
 			});
 			el.blur(function() { 
-                validateField(el, valid);
+                validateField(el, valid,globalOptions);
             });
 		}			
 	});
 		
-};		
-		
-		
-var validateForm=function(obj){
+};				
+var validateForm=function(obj,globalOptions){
 	
 	 var validationError = false;
 	$(obj).find("input,textarea,select").each(function(){
@@ -101,7 +98,7 @@ var validateForm=function(obj){
 	var el = $(this),valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
 		
 		if(valid!==null && valid.length>0){
-			if(!validateField(el,valid)){
+			if(!validateField(el,valid,globalOptions)){
 				validationError=true;
 			}
 		}
@@ -113,7 +110,7 @@ var validateForm=function(obj){
 	});
 	return validationError;
 };
-var validateField = function(field,valid){
+var validateField = function(field,valid,globalOptions){
 	 var el = $(field), error = false,isNonFlag=false, errorMsg = '',pwdStatus=0,elLength=el.val().length;	
 	
 	 var isNon = (el.attr('non-required')==undefined||el.attr('non-required')=='false')?false:true;
