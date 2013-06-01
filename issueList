@@ -3,6 +3,12 @@ jquery-Lweight-validate
 http://vikenlove.github.io/jquery-Lweight-validate
 http://www.oschina.net/p/jquery-lweight-validate 
 =========================================================================================
+version 1.0.7
+jquery-Lweight-validate-beta.js 
+2013-06-01
+整合规则属性文件
+增加对HTML中 a标签作为button 按钮的支持。
+=========================================================================================
 version 1.0.6
 jquery-Lweight-validate-beta.js 
 2013-05-27
