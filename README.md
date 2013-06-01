@@ -41,7 +41,7 @@ JS使用方式：
   $('#form').myValidate(
 			{
 				formCall:function(){formCallFunction();},//表单提交函数
-				isAlert:true,//是否启用alert
+				isAlert:false,//是否启用alert
 				formKey:false,//是否开启键盘回车事件
 				alterCall:function(msg){callbackFunction(msg);}	//自定义alert		
 			});						
