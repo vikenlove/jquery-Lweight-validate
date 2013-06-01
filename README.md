@@ -38,14 +38,16 @@ Lweight-validate API
 
 JS使用方式：
 
-  $('#form').myValidate(
-			{
-				formCall:function(){formCallFunction();},//表单提交函数
-				isAlert:false,//是否启用alert
-				formKey:false,//是否开启键盘回车事件
-				alterCall:function(msg){callbackFunction(msg);}	//自定义alert		
-			});						
-		});
+  $('#form').myValidate(options);						
 
+options:
 
+{
+	formCall:function(){formCallFunction();},//表单提交函数
+	isAlert:false,//是否启用alert
+	formKey:false,//是否开启键盘回车事件
+	alterCall:function(msg){callbackFunction(msg);}	//自定义alert		
+}
+
+除“formCall” 外 其他属性，若无需求可不用添加配置。
 </pre>
