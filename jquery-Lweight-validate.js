@@ -2,7 +2,7 @@
  * jquery-Lightweight-validation.js 
  * Original Idea: (Copyright 2013 Viken)
  * Updated by 大猫 
- * version 1.0.6
+ * version 1.0.7
  * =========================================================
  * http://vikenlove.github.io/jquery-Lweight-validate
  * http://www.oschina.net/p/jquery-lweight-validate 
@@ -22,7 +22,7 @@
 	$.fn.myValidate = function(options) {
 	var globalOptions  = $.extend({}, $.fn.myValidate.defaults, options);
 		var $this = this;
-		$this.find('button[btn-type=true]').click(function(){
+		$this.find('button[btn-type=true],a[btn-type=true]').click(function(){
 				validateClick($this,globalOptions);
 		});
 		if(globalOptions.formKey){
@@ -60,15 +60,43 @@
 			{name: 'dateYmd', validate: function(value) {return checkDate(value);}, defaultMsg: '请输入YYYY--MM--DD格式'},
 			{name: 'idCard', validate: function(value) {return checkIdCard(value);}, defaultMsg: '请输入正确的身份证号码'},
 			{name: 'dateCompare', validate: function(value) {return dateCompare();}, defaultMsg: '起始日期不能大于结束日期'}
-        ]
-    };
-
-var city={11:"北京",12:"天津",13:"河北",14:"山西",15:"内蒙古",21:"辽宁",22:"吉林",
+        ],
+		city : [
+			{11:"北京",12:"天津",13:"河北",14:"山西",15:"内蒙古",21:"辽宁",22:"吉林",
 			23:"黑龙江",31:"上海",32:"江苏",33:"浙江",34:"安徽",35:"福建",36:"江西",37:"山东",
 			41:"河南",42:"湖北",43:"湖南",44:"广东",45:"广西",46:"海南",50:"重庆",51:"四川",
 			52:"贵州",53:"云南",54:"西藏",61:"陕西",62:"甘肃",63:"青海",64:"宁夏",
-			65:"新疆",71:"台湾",81:"香港",82:"澳门",91:"国外"}; 	
+			65:"新疆",71:"台湾",81:"香港",82:"澳门",91:"国外"}		
+		]
+    };
+
 	
+			
+var checkIdCard = function(value){ 
+	var iSum=0,birthday;
+	if(!/^\d{17}(\d|x)$/i.test(value)){
+		return true; 
+	} 
+	value=value.replace(/x$/i,"a"); 
+	if($.fn.myValidate.defaults.city[parseInt(value.substr(0,2))]==null){
+		return true; 
+	} 
+	birthday=value.substr(6,4)+"-"+Number(value.substr(10,2))+"-"+Number(value.substr(12,2)); 
+	var d=new Date(birthday.replace(/-/g,"/")) ;
+	if(birthday!=(d.getFullYear()+"-"+ (d.getMonth()+1) + "-" + d.getDate())){
+		return true; 
+	}
+	for(var i = 17;i >= 0;i --){
+		iSum += (Math.pow(2,i) % 11) * parseInt(value.charAt(17 - i),11) ;
+	} 
+	if(iSum%11!=1) {
+		return true;
+	} 
+	return false;
+}; 
+
+
+			
 var validateBlur = function(obj,globalOptions){
 	$(obj).find("input,textarea,select").each(function(){
 	
@@ -211,28 +239,7 @@ var validateField = function(field,valid,globalOptions){
 	
 	return !error;
 };
-var checkIdCard = function(value){ 
-	var iSum=0,birthday;
-	if(!/^\d{17}(\d|x)$/i.test(value)){
-		return true; 
-	} 
-	value=value.replace(/x$/i,"a"); 
-	if(city[parseInt(value.substr(0,2))]==null){
-		return true; 
-	} 
-	birthday=value.substr(6,4)+"-"+Number(value.substr(10,2))+"-"+Number(value.substr(12,2)); 
-	var d=new Date(birthday.replace(/-/g,"/")) ;
-	if(birthday!=(d.getFullYear()+"-"+ (d.getMonth()+1) + "-" + d.getDate())){
-		return true; 
-	}
-	for(var i = 17;i >= 0;i --){
-		iSum += (Math.pow(2,i) % 11) * parseInt(value.charAt(17 - i),11) ;
-	} 
-	if(iSum%11!=1) {
-		return true;
-	} 
-	return false;
-}; 
+
 	
 	
 var dateCompare = function(){
