@@ -54,7 +54,8 @@
             {name: 'mail', validate: function(value) {return (!/^[a-zA-Z0-9]{1}([\._a-zA-Z0-9-]+)(\.[_a-zA-Z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+){1,3}$/.test(value));}, defaultMsg: '请输入邮箱地址。'},
             {name: 'char', validate: function(value) {return (!/^[a-z\_\-A-Z]*$/.test($.trim(value)));}, defaultMsg: '请输入英文字符。'},
             {name: 'chinese', validate: function(value) {return (!/^[\u4e00-\u9fff]$/.test($.trim(value)));}, defaultMsg: '请输入汉字。'},
-			{name: 'mobile', validate: function(value) {return (!/^(13|15|18)[0-9]{9}$/.test($.trim(value)));}, defaultMsg: '情输入正确手机号码。'},
+			{name: 'mobile', validate: function(value) {return (!/^(13|15|18)[0-9]{9}$/.test($.trim(value)));}, defaultMsg: '请输入正确手机号码。'},
+			{name: 'tell', validate: function(value) {return (!/^(([0\+]\d{2,3}-)?(0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/.test($.trim(value)));}, defaultMsg: '请输入正确电话号码格式:区号-号码。'},
 			{name: 'passWord', validate: function(value) {return checkPwd($.trim(value));}, defaultMsg: '密码长度必须在6~16之间。'},
 			{name: 'confirmPwd', validate: function(value) {return confirmPwd($.trim(value));}, defaultMsg: '两次密码不一致'},
 			{name: 'dateYmd', validate: function(value) {return checkDate($.trim(value));}, defaultMsg: '请输入YYYY--MM--DD格式'},
@@ -279,7 +280,7 @@ var confirmPwd = function(value) {
 
 
 var checkPwd = function(value){
-	if(value.length >= 6 && value.length<=16)
+	if(value.length >= 6 && value.length<=20)
 	{		
 		if(/[a-zA-Z]+/.test(value) && /[0-9]+/.test(value) && /\W+\D+/.test(value)) {
 				return 1;
