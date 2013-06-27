@@ -2,7 +2,7 @@
  * jquery-Lightweight-validation.js 
  * Original Idea: (Copyright 2013 Viken)
  * Updated by 大猫 
- * version 1.0.8  
+ * version 1.0.9 bate  
  * =========================================================
  * http://vikenlove.github.io/jquery-Lweight-validate
  * http://www.oschina.net/p/jquery-lweight-validate 
@@ -51,7 +51,7 @@
             {name: 'required', validate: function(value) {return ($.trim(value) == '');}, defaultMsg: '请输入内容。'},
 			{name: 'unRequired', validate: function(value) {return false;}, defaultMsg: '请输入内容。'},
             {name: 'number', validate: function(value) {return (!/^[0-9]\d*$/.test($.trim(value)));}, defaultMsg: '请输入数字。'},
-            {name: 'mail', validate: function(value) {return (!/^[a-zA-Z0-9]{1}([\._a-zA-Z0-9-]+)(\.[_a-zA-Z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+){1,3}$/.test(value));}, defaultMsg: '请输入邮箱地址。'},
+            {name: 'mail', validate: function(value) {return (!/^[a-zA-Z0-9]{1}([\._a-zA-Z0-9-]+)(\.[_a-zA-Z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+){1,3}$/.test($.trim(value)));}, defaultMsg: '请输入邮箱地址。'},
             {name: 'char', validate: function(value) {return (!/^[a-z\_\-A-Z]*$/.test($.trim(value)));}, defaultMsg: '请输入英文字符。'},
             {name: 'chinese', validate: function(value) {return (!/^[\u4e00-\u9fff]$/.test($.trim(value)));}, defaultMsg: '请输入汉字。'},
 			{name: 'mobile', validate: function(value) {return (!/^(13|15|18)[0-9]{9}$/.test($.trim(value)));}, defaultMsg: '请输入正确手机号码。'},
@@ -79,7 +79,7 @@ var checkIdCard = function(value){
 		return true; 
 	} 
 	value=value.replace(/x$/i,"a"); 
-	if($.fn.myValidate.defaults.city[parseInt(value.substr(0,2))]==null){
+	if($.fn.myValidate.defaults.city[0][parseInt(value.substr(0,2))]==null){
 		return true; 
 	} 
 	birthday=value.substr(6,4)+"-"+Number(value.substr(10,2))+"-"+Number(value.substr(12,2)); 
@@ -184,7 +184,7 @@ var validateField = function(field,valid,globalOptions){
 					error=true;
 					errorMsg=(el.attr('min-message')==undefined)?"文本长度不能小于"+min+"个字符":el.attr('min-message');
 				}else if(max != undefined){
-					if(elLength >= Number(max)){
+					if(elLength > Number(max)){
 						error=true;
 						errorMsg=(el.attr('max-message')==undefined)?"文本长度不能大于"+max+"个字符":el.attr('max-message');
 					}
