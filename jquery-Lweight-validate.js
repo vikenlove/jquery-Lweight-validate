@@ -202,7 +202,7 @@ var validateField = function(field,valid,globalOptions){
 		
 	}
 	 
-	var curTextDiv=el.parent(), curErrorEl = curTextDiv.children('.help-inline');
+	var curTextDiv=el.parent(), curErrorEl = curTextDiv.children('.help-inline'),uniformDiv=curTextDiv.attr("id");
 	
 	if(error){
 		if(globalOptions.isAlert){
@@ -214,9 +214,19 @@ var validateField = function(field,valid,globalOptions){
 		}else{
 			if(curErrorEl.hasClass('help-inline')){
 				var overHelp = curErrorEl.text();
-				curTextDiv.data('help-inline',overHelp);
+				if(uniformDiv!=undefined && uniformDiv.indexOf('uniform-')>-1){					
+					curTextDiv.parent().data('help-inline',overHelp);
+				}else{								
+					curTextDiv.data('help-inline',overHelp);
+				}
 			}else{
-				curTextDiv.append('<span class="help-inline error">'+errorMsg+'</span>');
+				
+				if(uniformDiv!=undefined && uniformDiv.indexOf('uniform-')>-1){					
+					curTextDiv.parent().append('<span class="help-inline error">'+errorMsg+'</span>');
+				}else{								
+					curTextDiv.append('<span class="help-inline error">'+errorMsg+'</span>');
+				}
+				
 			}
 			el.removeClass('right').addClass('error');
 		}
