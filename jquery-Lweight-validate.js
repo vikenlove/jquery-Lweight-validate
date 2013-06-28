@@ -110,6 +110,8 @@ var validateBlur = function(obj,globalOptions){
 				
 				if(curErrorEl.hasClass('help-inline')){
 					curErrorEl.remove();
+				}else if(curTextDiv.parent().children('.help-inline').hasClass('help-inline')){
+					curTextDiv.parent().children('.help-inline').remove();
 				}	
 			});
 			el.blur(function() { 
@@ -191,15 +193,17 @@ var validateField = function(field,valid,globalOptions){
 				}else{
 					isNonFlag=true;
 				}
-			}else if(_callBack!==null && _callBack.length>0){
-				var _ajaxCallBack = el.attr('data-callback');
-				error = eval(_ajaxCallBack);
-				if(error){
-					errorMsg=(el.attr('call-message')==undefined)?"校验无法通过，请重新输入":el.attr('call-message');
-				}
-			}	
-		}	
-		
+			}
+			if(!error){
+				if(_callBack!==null && _callBack.length>0){
+					var _ajaxCallBack = el.attr('data-callback');
+					error = eval(_ajaxCallBack);
+					if(error){
+						errorMsg=(el.attr('call-message')==undefined)?"校验无法通过，请重新输入":el.attr('call-message');
+					}
+				}	
+			}		
+		}			
 	}
 	 
 	var curTextDiv=el.parent(), curErrorEl = curTextDiv.children('.help-inline'),uniformDiv=curTextDiv.attr("id");
@@ -212,22 +216,20 @@ var validateField = function(field,valid,globalOptions){
 				alert(errorMsg);				
 			}	
 		}else{
-			if(curErrorEl.hasClass('help-inline')){
 				var overHelp = curErrorEl.text();
-				if(uniformDiv!=undefined && uniformDiv.indexOf('uniform-')>-1){					
-					curTextDiv.parent().data('help-inline',overHelp);
-				}else{								
-					curTextDiv.data('help-inline',overHelp);
-				}
-			}else{
-				
-				if(uniformDiv!=undefined && uniformDiv.indexOf('uniform-')>-1){					
+			if(uniformDiv!=undefined && uniformDiv.indexOf('uniform-')>-1){
+				if(curTextDiv.parent().children('.help-inline').hasClass('help-inline')){
+					curTextDiv.parent().data('help-inline',overHelp);	
+				}else{
 					curTextDiv.parent().append('<span class="help-inline error">'+errorMsg+'</span>');
-				}else{								
+				}						
+			}else{
+				if(curErrorEl.hasClass('help-inline')){
+					curTextDiv.data('help-inline',overHelp);
+				}else{
 					curTextDiv.append('<span class="help-inline error">'+errorMsg+'</span>');
 				}
-				
-			}
+			}		
 			el.removeClass('right').addClass('error');
 		}
 	}else if(pwdStatus > 0){
