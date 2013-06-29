@@ -2,7 +2,7 @@
  * jquery-Lightweight-validation.js 
  * Original Idea: (Copyright 2013 Viken)
  * Updated by 大猫 
- * version 1.0.9 bate  
+ * version 1.0.9  
  * =========================================================
  * http://vikenlove.github.io/jquery-Lweight-validate
  * http://www.oschina.net/p/jquery-lweight-validate 
@@ -20,22 +20,22 @@
  * ========================================================= */
 ;(function($) {     	
 	$.fn.myValidate = function(options) {
-	var globalOptions  = $.extend({}, $.fn.myValidate.defaults, options);
-		var $this = this;
-		$this.find('button[btn-type=true],a[btn-type=true]').click(function(){
-				validateClick($this,globalOptions);
-		});
-		if(globalOptions.formKey){
-			$(document).keyup(function(event){
-			  switch(event.keyCode) {
-				case 13:
+		var globalOptions  = $.extend({}, $.fn.defaults, options);
+			var $this = this;
+			$this.find('button[btn-type=true],a[btn-type=true]').click(function(){
 					validateClick($this,globalOptions);
-					break; 
-				}
 			});
-		};
+			if(globalOptions.formKey){
+				$(document).keyup(function(event){
+				  switch(event.keyCode) {
+					case 13:
+						validateClick($this,globalOptions);
+						break; 
+					}
+				});
+			};
 			validateBlur($this,globalOptions);
-};
+	};
 
 
 	var validateClick = function(obj,globalOptions){
@@ -46,7 +46,8 @@
 		}	
 	};
 	
-   $.fn.myValidate.defaults = {
+ 
+  $.fn.defaults = {
         validRules : [
             {name: 'required', validate: function(value) {return ($.trim(value) == '');}, defaultMsg: '请输入内容。'},
 			{name: 'unRequired', validate: function(value) {return false;}, defaultMsg: '请输入内容。'},
@@ -70,31 +71,7 @@
 			65:"新疆",71:"台湾",81:"香港",82:"澳门",91:"国外"}		
 		]
     };
-
 	
-			
-var checkIdCard = function(value){ 
-	var iSum=0,birthday;
-	if(!/^\d{17}(\d|x)$/i.test(value)){
-		return true; 
-	} 
-	value=value.replace(/x$/i,"a"); 
-	if($.fn.myValidate.defaults.city[0][parseInt(value.substr(0,2))]==null){
-		return true; 
-	} 
-	birthday=value.substr(6,4)+"-"+Number(value.substr(10,2))+"-"+Number(value.substr(12,2)); 
-	var d=new Date(birthday.replace(/-/g,"/")) ;
-	if(birthday!=(d.getFullYear()+"-"+ (d.getMonth()+1) + "-" + d.getDate())){
-		return true; 
-	}
-	for(var i = 17;i >= 0;i --){
-		iSum += (Math.pow(2,i) % 11) * parseInt(value.charAt(17 - i),11) ;
-	} 
-	if(iSum%11!=1) {
-		return true;
-	} 
-	return false;
-}; 
 
 
 			
@@ -253,6 +230,29 @@ var validateField = function(field,valid,globalOptions){
 	return !error;
 };
 
+			
+var checkIdCard = function(value){ 
+	var iSum=0,birthday;
+	if(!/^\d{17}(\d|x)$/i.test(value)){
+		return true; 
+	} 
+	value=value.replace(/x$/i,"a"); 
+	if($(this).defaults.city[0][parseInt(value.substr(0,2))]==null){
+		return true; 
+	} 
+	birthday=value.substr(6,4)+"-"+Number(value.substr(10,2))+"-"+Number(value.substr(12,2)); 
+	var d=new Date(birthday.replace(/-/g,"/")) ;
+	if(birthday!=(d.getFullYear()+"-"+ (d.getMonth()+1) + "-" + d.getDate())){
+		return true; 
+	}
+	for(var i = 17;i >= 0;i --){
+		iSum += (Math.pow(2,i) % 11) * parseInt(value.charAt(17 - i),11) ;
+	} 
+	if(iSum%11!=1) {
+		return true;
+	} 
+	return false;
+}; 
 	
 	
 var dateCompare = function(){
