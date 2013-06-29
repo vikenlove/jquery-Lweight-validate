@@ -3,6 +3,15 @@ jquery-Lweight-validate
 http://vikenlove.github.io/jquery-Lweight-validate
 http://www.oschina.net/p/jquery-lweight-validate 
 =========================================================================================
+version 1.0.9
+jquery-Lweight-validate-beta.js 
+2013-06-29
+修复长度校验等值问题
+修复因为jquery.uniform.js 导致的select校验提示信息不出现
+修复文本空格未去掉的问题
+优化电话号码校验支持区号分机号国家号码
+优化数据参数调用
+=========================================================================================
 version 1.0.8
 jquery-Lweight-validate-beta.js 
 2013-06-16
