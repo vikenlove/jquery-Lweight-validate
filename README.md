@@ -4,7 +4,23 @@ http://vikenlove.github.io/jquery-Lweight-validate
 开源轻量级校验框架：更新信息与BUG修复记录请查看issueList文件
 =========================================================================================
 
-Lweight-validate API：
+如何使用:
+<code>
+$('#form').myValidate(options)
+</code>
+<pre>
+例:
+   	$('#form').myValidate(
+			{
+				formCall:function(){formCallFunction();},
+				isAlert:false,
+				formKey:false,
+				alterCall:function(msg){callbackFunction(msg);}			
+			});	
+
+</pre>
+
+注:options 同校验属性-other config
 
 校验属性-check-type规则：
 <pre>
@@ -33,10 +49,11 @@ min-max：文本长度校验-例：min-max="1-10" 最小长度为1，最大长�
 data-callback：文本异步校验回调函数
 call-message：异步回调自定义信息
 options：
-        formCall:表单提交函数 
-        isAlert：是否开启alert弹出方式，true/false 不配置，则等于为false
-        formKey: 是否开启回车键监听,true/false 不配置，则等于为false
-        alterCall:alert 弹出方式自定义回调函数，此方法用于自定义的alert效果 function(msg){callbackFunction(msg);}	
+        formCall:表单提交函数(*必配选项*)
+        isAlert：是否开启alert弹出方式，true/false 不配置，则等于为false(非必配选项)
+        formKey: 是否开启回车键监听,true/false 不配置，则等于为false(非必配选项)
+        alterCall:alert 弹出方式自定义回调函数，此方法用于自定义的
+                  alert效果 function(msg){callbackFunction(msg);}	（非必配选项）
 </pre>
 
 
