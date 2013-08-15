@@ -59,35 +59,35 @@ options：
 ==============
 HMTL DEMO:
 <code>
-<form id="form">
+&lt;form id="form"&gt;
 	//当文本输入值后，校验其类型，不填则不进行校验
-	<div class="control-group">
-		<label class="control-label" for="inputtext">数字</label>
-		  <div class="controls">
-			<input type="text" id="inputtext" check-type="number" non-required='true'>
+	&lt;div class="control-group"&gt;
+		&lt;label class="control-label" for="inputtext"&gt;数字&lt;/label&gt;
+		  &lt;div class="controls"&gt;
+			&lt;input type="text" id="inputtext" check-type="number" non-required='true'&gt;
 							
-	        </div>
-	</div>
+	        &lt;/div>
+	&lt;/div>
         //文本异步调用校验配置
-	<div class="control-group">
-	   <label class="control-label" for="inputName">用户名</label>
-		<div class="controls">
-			<input type="text" id="inputName" check-type="required" 
+	&lt;div class="control-group"&gt;
+	   &lt;label class="control-label" for="inputName"&gt;用户名&lt;/label&gt;
+		&lt;div class="controls"&gt;
+			&lt;input type="text" id="inputName" check-type="required" 
 			data-callback="mycallback()" call-message="用户名名已存在" 
-			required-message="用户名不能为空" >
-		</div>
-	</div>
+			required-message="用户名不能为空"&gt;
+		&lt;/div>
+	&lt;/div>
 	//非特定规则校验下，当输入后校验，不输入不进行校验配置
-	<div class="control-group">
-		<label class="control-label" for="inputtext">文本</label>
-		 <div class="controls">
-			<input type="text" id="inputtext" check-type="unRequired"
+	&lt;div class="control-group"&gt;
+		&lt;label class="control-label" for="inputtext"&gt;文本&lt;/label&gt;
+		 &lt;div class="controls"&gt;
+			&lt;input type="text" id="inputtext" check-type="unRequired"
 					min-max="3-5" min-message="字符长度不得小于3个字符" 
 					max-message="字符长度不得超过5个字符"  
-					required-message="文本不能为空！"  >
+					required-message="文本不能为空！"  &gt;
 						
-		</div>
-	</div>			
+		&lt;/div&gt;
+	&lt;/div&gt;			
 </form>
 </code>
 
