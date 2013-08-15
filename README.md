@@ -58,7 +58,7 @@ options：
 
 ==============
 HMTL DEMO:
-<code>
+<pre>
 &lt;form id="form"&gt;
 	//当文本输入值后，校验其类型，不填则不进行校验
 	&lt;div class="control-group"&gt;
@@ -66,8 +66,8 @@ HMTL DEMO:
 		  &lt;div class="controls"&gt;
 			&lt;input type="text" id="inputtext" check-type="number" non-required='true'&gt;
 							
-	        &lt;/div>
-	&lt;/div>
+	        &lt;/div&gt;
+	&lt;/div&gt;
         //文本异步调用校验配置
 	&lt;div class="control-group"&gt;
 	   &lt;label class="control-label" for="inputName"&gt;用户名&lt;/label&gt;
@@ -88,7 +88,7 @@ HMTL DEMO:
 						
 		&lt;/div&gt;
 	&lt;/div&gt;			
-</form>
-</code>
+&lt;/form&gt;
+</pre>
 
 
