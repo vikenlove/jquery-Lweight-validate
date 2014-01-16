@@ -2,7 +2,7 @@
  * jquery-Lightweight-validation.js 
  * Original Idea: (Copyright 2013 Viken)
  * Updated by 大猫 
- * version 1.0.9  
+ * version 1.1.0  
  * =========================================================
  * http://vikenlove.github.io/jquery-Lweight-validate
  * http://www.oschina.net/p/jquery-lweight-validate 
@@ -76,7 +76,7 @@
 
 			
 var validateBlur = function(obj,globalOptions){
-	$(obj).find("input,textarea,select").each(function(){
+	$(obj).find("input:visible,textarea:visible,select:visible").each(function(){
 	
 	var el = $(this),valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
 		
@@ -101,7 +101,7 @@ var validateBlur = function(obj,globalOptions){
 var validateForm=function(obj,globalOptions){
 	
 	 var validationError = false;
-	$(obj).find("input,textarea,select").each(function(){
+	$(obj).find("input:visible,textarea:visible,select:visible").each(function(){
 	
 	var el = $(this),valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
 		
@@ -123,7 +123,7 @@ var validateField = function(field,valid,globalOptions){
 	
 	 var isNon = (el.attr('non-required')==undefined||el.attr('non-required')=='false')?false:true;
 	 var rules = globalOptions.validRules;
-		for(var i=0;i<rules.length;i++){
+		for(var i=0,j=rules.length;i<j;i++){
 			var rule = rules[i];
 		
 			if(valid==rule.name){
