@@ -3,6 +3,13 @@ jquery-Lweight-validate
 http://vikenlove.github.io/jquery-Lweight-validate
 http://www.oschina.net/p/jquery-lweight-validate 
 =========================================================================================
+version 1.1.0
+jquery-Lweight-validate-beta.js 
+2014-01-16
+优化for循环写法
+修复 因为hidden input 导致无法验证通过问题
+调整find方法中 只寻找所有可见元素进行校验
+=========================================================================================
 version 1.0.9
 jquery-Lweight-validate-beta.js 
 2013-06-29
