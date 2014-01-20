@@ -20,7 +20,8 @@ $('#form').myValidate(options)
 
 </pre>
 
-注:options 同校验属性-other config
+注:options 同校验属性-other config,所有要校验的属性都需要在form标签内，
+表单提交按钮：btn-type="true" 需要配置
 
 校验属性-check-type规则：
 <pre>
