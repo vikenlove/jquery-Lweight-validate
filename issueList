@@ -8,7 +8,8 @@ jquery-Lweight-validate-beta.js
 2014-01-16
 优化for循环写法
 修复 因为hidden input 导致无法验证通过问题
-调整find方法中 只寻找所有可见元素进行校验
+调整find方法，去掉只有button 和a 按钮标签的限制
+只对可见元素进行校验
 =========================================================================================
 version 1.0.9
 jquery-Lweight-validate-beta.js 
