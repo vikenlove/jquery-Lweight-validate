@@ -22,7 +22,7 @@
 	$.fn.myValidate = function(options) {
 		var globalOptions  = $.extend({}, $.fn.defaults, options);
 			var $this = this;
-			$this.find('button[btn-type=true],a[btn-type=true]').click(function(){
+			$this.find('[btn-type=true]').click(function(){
 					validateClick($this,globalOptions);
 			});
 			if(globalOptions.formKey){
@@ -54,7 +54,7 @@
             {name: 'number', validate: function(value) {return (!/^[0-9]\d*$/.test($.trim(value)));}, defaultMsg: '请输入数字。'},
             {name: 'mail', validate: function(value) {return (!/^[a-zA-Z0-9]{1}([\._a-zA-Z0-9-]+)(\.[_a-zA-Z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+){1,3}$/.test($.trim(value)));}, defaultMsg: '请输入邮箱地址。'},
             {name: 'char', validate: function(value) {return (!/^[a-z\_\-A-Z]*$/.test($.trim(value)));}, defaultMsg: '请输入英文字符。'},
-            {name: 'chinese', validate: function(value) {return (!/^[\u4e00-\u9fff]$/.test($.trim(value)));}, defaultMsg: '请输入汉字。'},
+            {name: 'chinese', validate: function(value) {return (!/^[\u4e00-\u9fff]+$/.test($.trim(value)));}, defaultMsg: '请输入汉字。'},
 			{name: 'mobile', validate: function(value) {return (!/^(13|15|18)[0-9]{9}$/.test($.trim(value)));}, defaultMsg: '请输入正确手机号码。'},
 			{name: 'tell', validate: function(value) {return (!/^(([0\+]\d{2,3}-)?(0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/.test($.trim(value)));}, defaultMsg: '请输入正确电话号码格式:区号-号码。'},
 			{name: 'passWord', validate: function(value) {return checkPwd($.trim(value));}, defaultMsg: '密码长度必须在6~20之间。'},
@@ -76,7 +76,7 @@
 
 			
 var validateBlur = function(obj,globalOptions){
-	$(obj).find("input:visible,textarea:visible,select:visible").each(function(){
+	$(obj).find("input,textarea,select").each(function(){
 	
 	var el = $(this),valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
 		
