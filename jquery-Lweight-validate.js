@@ -2,7 +2,7 @@
  * jquery-Lightweight-validation.js 
  * Original Idea: (Copyright 2013 Viken)
  * Updated by 大猫 
- * version 1.1.0  
+ * version 1.1.1-beta  
  * =========================================================
  * http://vikenlove.github.io/jquery-Lweight-validate
  * http://www.oschina.net/p/jquery-lweight-validate 
@@ -119,36 +119,29 @@ var validateForm=function(obj,globalOptions){
 	return validationError;
 };
 var validateField = function(field,valid,globalOptions){
-	 var el = $(field), error = false,isNonFlag=false, errorMsg = '',pwdStatus=0,elLength=el.val().length;	
-	
+	 var el = $(field), error = false,isNonFlag=false, errorMsg = '',pwdStatus=0,elLength=el.val().length;		
 	 var isNon = (el.attr('non-required')==undefined||el.attr('non-required')=='false')?false:true;
 	 var rules = globalOptions.validRules;
 		for(var i=0,j=rules.length;i<j;i++){
 			var rule = rules[i];
 		
 			if(valid==rule.name){
-				if(rule.name=='passWord'){
-					pwdStatus = rule.validate(el.val());
-					if(pwdStatus == -1){
-						error=true;
-						errorMsg=(el.attr('required-message')==undefined)?rule.defaultMsg:el.attr('required-message');
-					}
-					break;
-				}else if(isNon){
+				var ruleVal = rule.validate(el.val());
+				if(isNon){
 					if($.trim(el.val()).length > 0){
-						if(rule.validate(el.val())){
+						if(ruleVal==true||ruleVal==-1){
 							error=true;
 							errorMsg=(el.attr('required-message')==undefined)?rule.defaultMsg:el.attr('required-message');
 							break;
 						}else{
 							isNonFlag=true;
-						}
+						}					
 					}
-				}else if(rule.validate(el.val())){
+				}else if(ruleVal==true||ruleVal==-1){
 					error=true;
 					errorMsg=(el.attr('required-message')==undefined)?rule.defaultMsg:el.attr('required-message');
 					break;
-				}				
+				}	
 			}
 		}
 	if(!error){
@@ -209,10 +202,10 @@ var validateField = function(field,valid,globalOptions){
 			}		
 			el.removeClass('right').addClass('error');
 		}
-	}else if(pwdStatus > 0){
+	}else if(ruleVal > 0){
 	
-		var pwdStrong = passWordStatus(pwdStatus);
-		var classpic = classStatus(pwdStatus);
+		var pwdStrong = passWordStatus(ruleVal);
+		var classpic = classStatus(ruleVal);
 		if(curErrorEl.hasClass('help-inline')){
 				curTextDiv.data('help-inline',pwdStrong);
 			}else{
@@ -308,7 +301,7 @@ var checkPwd = function(value){
 			}
 		}	
 	}else{
-		return -1;
+		return true;
 	}
 };
 
