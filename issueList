@@ -2,6 +2,12 @@ jquery-Lweight-validate
 作者：大猫
 http://vikenlove.github.io/jquery-Lweight-validate
 http://www.oschina.net/p/jquery-lweight-validate 
+============================================================================================
+version 1.1.1
+jquery-Lweight-validate-beta.js 
+2014-05-14
+优化for循环写法
+重构部分判断逻辑，删除了无用的判断逻辑。
 =========================================================================================
 version 1.1.0
 jquery-Lweight-validate-beta.js 
