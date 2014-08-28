@@ -2,7 +2,7 @@
  * jquery-Lightweight-validation.js 
  * Original Idea: (Copyright 2013 Viken)
  * Updated by 大猫 
- * version 1.1.1-beta  
+ * version 1.1.2  
  * =========================================================
  * http://vikenlove.github.io/jquery-Lweight-validate
  * http://www.oschina.net/p/jquery-lweight-validate 
@@ -49,7 +49,7 @@
  
   $.fn.defaults = {
         validRules : [
-            {name: 'required', validate: function(value) {return ($.trim(value) == '');}, defaultMsg: '请输入内容。'},
+            {name: 'required', validate: function(value) {return ($.trim(value) == ''||$.trim(value).length==0||$.trim(value)==null);}, defaultMsg: '请输入内容。'},
 			{name: 'unRequired', validate: function(value) {return false;}, defaultMsg: '请输入内容。'},
             {name: 'number', validate: function(value) {return (!/^[0-9]\d*$/.test($.trim(value)));}, defaultMsg: '请输入数字。'},
             {name: 'mail', validate: function(value) {return (!/^[a-zA-Z0-9]{1}([\._a-zA-Z0-9-]+)(\.[_a-zA-Z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+){1,3}$/.test($.trim(value)));}, defaultMsg: '请输入邮箱地址。'},
@@ -78,7 +78,8 @@
 var validateBlur = function(obj,globalOptions){
 	$(obj).find("input,textarea,select").each(function(){
 	
-	var el = $(this),valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
+	var el = $(this);
+	var valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
 		
 		if(valid!==null && valid.length>0){
 		
@@ -92,8 +93,14 @@ var validateBlur = function(obj,globalOptions){
 				}	
 			});
 			el.blur(function() { 
-                validateField(el, valid,globalOptions);
+				if(el.attr("check-type")=='dateYmd'){
+					setTimeout(function(){validateField(el, valid,globalOptions);},500); 
+				}else{
+					validateField(el, valid,globalOptions);
+				}
             });
+			
+			
 		}			
 	});
 		
@@ -103,7 +110,8 @@ var validateForm=function(obj,globalOptions){
 	 var validationError = false;
 	$(obj).find("input:visible,textarea:visible,select:visible").each(function(){
 	
-	var el = $(this),valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
+	var el = $(this);
+	var valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
 		
 		if(valid!==null && valid.length>0){
 			if(!validateField(el,valid,globalOptions)){
@@ -119,7 +127,8 @@ var validateForm=function(obj,globalOptions){
 	return validationError;
 };
 var validateField = function(field,valid,globalOptions){
-	 var el = $(field), error = false,isNonFlag=false, errorMsg = '',pwdStatus=0,elLength=el.val().length;		
+	 var el = $(field);
+	 var error = false,isNonFlag=false, errorMsg = '',pwdStatus=0,elLength=el.val().length;		
 	 var isNon = (el.attr('non-required')==undefined||el.attr('non-required')=='false')?false:true;
 	 var rules = globalOptions.validRules;
 		for(var i=0,j=rules.length;i<j;i++){
@@ -280,7 +289,7 @@ var confirmPwd = function(value) {
         pwd1 = $.trim(inputObj.eq(0).val());
         pwd2 = $.trim(inputObj.eq(1).val());
     }
-    return (pwd2.length > 0?(pwd1 == pwd2?false:true):true);    
+    return (pwd2.length >= 0?(pwd1 == pwd2?false:true):true);    
 };
 
 
