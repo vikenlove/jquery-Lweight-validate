@@ -3,6 +3,12 @@ jquery-Lweight-validate
 http://vikenlove.github.io/jquery-Lweight-validate
 http://www.oschina.net/p/jquery-lweight-validate 
 ============================================================================================
+version 1.1.2
+jquery-Lweight-validate-beta.js 
+2014-08-28
+修复校验时间，blur无法获取时间控件值问题
+提升了空值判断的种类
+============================================================================================
 version 1.1.1
 jquery-Lweight-validate-beta.js 
 2014-05-14
