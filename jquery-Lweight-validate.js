@@ -2,7 +2,7 @@
  * jquery-Lightweight-validation.js 
  * Original Idea: (Copyright 2013 Viken)
  * Updated by 大猫 
- * version 1.1.2  
+ * version 1.1.3  
  * =========================================================
  * http://vikenlove.github.io/jquery-Lweight-validate
  * http://www.oschina.net/p/jquery-lweight-validate 
@@ -69,7 +69,11 @@
 			41:"河南",42:"湖北",43:"湖南",44:"广东",45:"广西",46:"海南",50:"重庆",51:"四川",
 			52:"贵州",53:"云南",54:"西藏",61:"陕西",62:"甘肃",63:"青海",64:"宁夏",
 			65:"新疆",71:"台湾",81:"香港",82:"澳门",91:"国外"}		
-		]
+		],
+		errorCustom : {
+				customFlag:false,
+				regionText:false
+		}
     };
 	
 
@@ -86,11 +90,19 @@ var validateBlur = function(obj,globalOptions){
 			el.focus(function(){
 				var curTextDiv=el.parent(), curErrorEl = curTextDiv.children('.help-inline');
 				
-				if(curErrorEl.hasClass('help-inline')){
-					curErrorEl.remove();
-				}else if(curTextDiv.parent().children('.help-inline').hasClass('help-inline')){
-					curTextDiv.parent().children('.help-inline').remove();
-				}	
+				if(globalOptions.errorCustom.customFlag){
+						if(globalOptions.errorCustom.regionText){
+								el.val(el.attr("srcValue")).css("color","");
+						}else{
+							curTextDiv.siblings(".error-custom").text("");
+						}					
+				}else{
+					if(curErrorEl.hasClass('help-inline')){
+						curErrorEl.remove();
+					}else if(curTextDiv.parent().children('.help-inline').hasClass('help-inline')){
+						curTextDiv.parent().children('.help-inline').remove();
+					}
+				}				
 			});
 			el.blur(function() { 
 				if(el.attr("check-type")=='dateYmd'){
@@ -187,6 +199,9 @@ var validateField = function(field,valid,globalOptions){
 	 
 	var curTextDiv=el.parent(), curErrorEl = curTextDiv.children('.help-inline'),uniformDiv=curTextDiv.attr("id");
 	
+
+
+
 	if(error){
 		if(globalOptions.isAlert){
 			if(globalOptions.alterCall != undefined){
@@ -195,43 +210,104 @@ var validateField = function(field,valid,globalOptions){
 				alert(errorMsg);				
 			}	
 		}else{
-				var overHelp = curErrorEl.text();
 			if(uniformDiv!=undefined && uniformDiv.indexOf('uniform-')>-1){
 				if(curTextDiv.parent().children('.help-inline').hasClass('help-inline')){
-					curTextDiv.parent().data('help-inline',overHelp);	
+					curTextDiv.parent().data('help-inline',errorMsg);	
 				}else{
-					curTextDiv.parent().append('<span class="help-inline error">'+errorMsg+'</span>');
+					if(globalOptions.errorCustom.customFlag){
+						curTextDiv.siblings(".error-custom").append(errorMsg);
+					}else{
+						curTextDiv.parent().append('<span class="help-inline error">'+errorMsg+'</span>');
+					}
+					
 				}						
 			}else{
-				if(curErrorEl.hasClass('help-inline')){
-					curTextDiv.data('help-inline',overHelp);
-				}else{
-					curTextDiv.append('<span class="help-inline error">'+errorMsg+'</span>');
-				}
+
+					if(globalOptions.errorCustom.customFlag){
+						if(globalOptions.errorCustom.regionText){
+							
+								var textValue=el.val();
+								el.val(errorMsg).css("color","#cccccc").attr("srcValue",textValue);
+						}else{
+							curTextDiv.siblings(".error-custom").text(errorMsg);					
+						}
+	
+
+					}else{
+						if(curErrorEl.hasClass('help-inline')){
+							curTextDiv.data('help-inline',errorMsg);
+						}else{
+							curTextDiv.append('<span class="help-inline error">'+errorMsg+'</span>');
+						}
+					}			
 			}		
-			el.removeClass('right').addClass('error');
+			//el.removeClass('right').addClass('error');
+			removeElStyleClass(el,globalOptions,1);
+
 		}
 	}else if(ruleVal > 0){
 	
 		var pwdStrong = passWordStatus(ruleVal);
 		var classpic = classStatus(ruleVal);
+		
+
+	if(globalOptions.errorCustom.customFlag){
+		
+			if(trimReplaceHtml(curTextDiv.siblings(".error-custom").text()).length>0){
+					curTextDiv.data('error-custom',pwdStrong);
+				}else{
+					curTextDiv.siblings(".error-custom").append(pwdStrong);	
+			};
+
+	}else{
 		if(curErrorEl.hasClass('help-inline')){
 				curTextDiv.data('help-inline',pwdStrong);
-			}else{
+			}else{		
 				curTextDiv.append('<span class="help-inline '+classpic+'">'+pwdStrong+'</span>');
-		}
-		el.removeClass('error').addClass('right');	
+		};
+
+	}
+		//el.removeClass('error').removeClass('right');
+		removeElStyleClass(el,globalOptions,2);
 		
 	}else{
 		if(!globalOptions.isAlert){
 			curErrorEl.remove();
-			isNonFlag==true?el.removeClass('error').addClass('right'):el.removeClass('error').removeClass('right');	
+			//isNonFlag==true?el.removeClass('error').addClass('right'):el.removeClass('error').removeClass('right');	
+			removeElStyleClass(el,globalOptions,2);
+			
+				if(globalOptions.errorCustom.regionText){
+					el.attr("srcValue",el.val());
+				}
+			
+						
 		}
 	}
 	
 	return !error;
 };
 
+var removeElStyleClass = function(objel,globalOptions,reomveType){
+		if(globalOptions.errorStyle!=undefined){
+				var styleOption =globalOptions.errorStyle;
+					if(reomveType==1){
+						objel.parents("."+styleOption.errorRegion).removeClass(styleOption.rightClass).addClass(styleOption.errorClass);
+					}else{
+						objel.parents("."+styleOption.errorRegion).removeClass(styleOption.errorClass).addClass(styleOption.rightClass);
+					};				
+			}else{					
+					if(reomveType==1){
+						objel.removeClass('right').addClass('error');
+					}else{
+						objel.removeClass('error').addClass('right');
+					};
+			};
+};
+
+
+var trimReplaceHtml = function(value){
+	return $.trim(value.replace( /\r\n/g,""));
+}
 			
 var checkIdCard = function(value){ 
 	var iSum=0,birthday;
