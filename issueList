@@ -3,6 +3,20 @@ jquery-Lweight-validate
 http://vikenlove.github.io/jquery-Lweight-validate
 http://www.oschina.net/p/jquery-lweight-validate 
 ============================================================================================
+version 1.1.3
+jquery-Lweight-validate-beta.js 
+216-02-16
+增加
+errorCustom:{customFlag :true,regionText:false},
+增加自定义属性：
+  customFlag :true 为自定义错误校验信息显示位置，
+  regionText：true 错误信息显示在文本框内效果
+errorStyle:{errorRegion:"error-div",errorClass:"textError",rightClass:"right-item"},
+错误信息样式 自定义
+        errorRegion：样式DIV 显示位置。
+        errorClass：错误样式样式表值
+        rightClass：正确显示样式表
+============================================================================================
 version 1.1.2
 jquery-Lweight-validate-beta.js 
 2014-08-28
