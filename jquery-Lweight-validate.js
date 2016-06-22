@@ -2,7 +2,7 @@
  * jquery-Lightweight-validation.js 
  * Original Idea: (Copyright 2013 Viken)
  * Updated by 大猫 
- * version 1.1.3  
+ * version 1.1.5 
  * =========================================================
  * http://vikenlove.github.io/jquery-Lweight-validate
  * http://www.oschina.net/p/jquery-lweight-validate 
@@ -20,7 +20,7 @@
  * ========================================================= */
 ;(function($) {     	
 	$.fn.myValidate = function(options) {
-		var globalOptions  = $.extend({}, $.fn.defaults, options);
+		var globalOptions  = $.extend({}, defaults, options);
 			var $this = this;
 			$this.find('[btn-type=true]').click(function(){
 					validateClick($this,globalOptions);
@@ -47,7 +47,7 @@
 	};
 	
  
-  $.fn.defaults = {
+  var defaults = {
         validRules : [
             {name: 'required', validate: function(value) {return ($.trim(value) == ''||$.trim(value).length==0||$.trim(value)==null);}, defaultMsg: '请输入内容。'},
 			{name: 'unRequired', validate: function(value) {return false;}, defaultMsg: '请输入内容。'},
@@ -58,10 +58,14 @@
 			{name: 'mobile', validate: function(value) {return (!/^(13|15|18)[0-9]{9}$/.test($.trim(value)));}, defaultMsg: '请输入正确手机号码。'},
 			{name: 'tell', validate: function(value) {return (!/^(([0\+]\d{2,3}-)?(0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/.test($.trim(value)));}, defaultMsg: '请输入正确电话号码格式:区号-号码。'},
 			{name: 'passWord', validate: function(value) {return checkPwd($.trim(value));}, defaultMsg: '密码长度必须在6~20之间。'},
-			{name: 'confirmPwd', validate: function(value) {return confirmPwd($.trim(value));}, defaultMsg: '两次密码不一致'},
+			{name: 'confirmPwd', validate: function(value,objel) {return confirmPwd($.trim(value),objel);}, defaultMsg: '两次密码不一致'},
 			{name: 'dateYmd', validate: function(value) {return checkDate($.trim(value));}, defaultMsg: '请输入YYYY--MM--DD格式'},
 			{name: 'idCard', validate: function(value) {return checkIdCard($.trim(value));}, defaultMsg: '请输入正确的身份证号码'},
-			{name: 'dateCompare', validate: function(value) {return dateCompare();}, defaultMsg: '起始日期不能大于结束日期'}
+			{name: 'dateCompare', validate: function(value) {return dateCompare();}, defaultMsg: '起始日期不能大于结束日期'},
+			{name: 'url', validate: function(value) {return (!/^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test($.trim(value)))}, defaultMsg: '请输正确的网址。'}
+			
+			
+			
         ],
 		city : [
 			{11:"北京",12:"天津",13:"河北",14:"山西",15:"内蒙古",21:"辽宁",22:"吉林",
@@ -89,12 +93,16 @@ var validateBlur = function(obj,globalOptions){
 		
 			el.focus(function(){
 				var curTextDiv=el.parent(), curErrorEl = curTextDiv.children('.help-inline');
-				
+				el.removeAttr("lable-error");
 				if(globalOptions.errorCustom.customFlag){
 						if(globalOptions.errorCustom.regionText){
+							var checkType = el.attr("check-type");
+							if(checkType=='passWord' || checkType=="confirmPwd"){
+								el.attr("type","password");
+							};
 								el.val(el.attr("srcValue")).css("color","");
 						}else{
-							curTextDiv.siblings(".error-custom").text("");
+							el.siblings("."+globalOptions.errorStyle.errorRegion).text("").removeClass(globalOptions.errorStyle.errorClass);
 						}					
 				}else{
 					if(curErrorEl.hasClass('help-inline')){
@@ -118,23 +126,27 @@ var validateBlur = function(obj,globalOptions){
 		
 };				
 var validateForm=function(obj,globalOptions){
-	
+	//TODO shuangjia hou 能提交
 	 var validationError = false;
 	$(obj).find("input:visible,textarea:visible,select:visible").each(function(){
 	
 	var el = $(this);
 	var valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
-		
+		if(el.attr("lable-error")){
+			validationError=true;
+			return;
+		};
+	
 		if(valid!==null && valid.length>0){
 			if(!validateField(el,valid,globalOptions)){
 				validationError=true;
 			}
-		}
+		};
 		if(globalOptions.isAlert){
 			if(validationError){
 				return false;
 			}				
-		}		
+		};		
 	});
 	return validationError;
 };
@@ -147,7 +159,7 @@ var validateField = function(field,valid,globalOptions){
 			var rule = rules[i];
 		
 			if(valid==rule.name){
-				var ruleVal = rule.validate(el.val());
+				var ruleVal = rule.validate(el.val(),el);
 				if(isNon){
 					if($.trim(el.val()).length > 0){
 						if(ruleVal==true||ruleVal==-1){
@@ -215,7 +227,7 @@ var validateField = function(field,valid,globalOptions){
 					curTextDiv.parent().data('help-inline',errorMsg);	
 				}else{
 					if(globalOptions.errorCustom.customFlag){
-						curTextDiv.siblings(".error-custom").append(errorMsg);
+						el.siblings("."+globalOptions.errorStyle.errorRegion).append(errorMsg);
 					}else{
 						curTextDiv.parent().append('<span class="help-inline error">'+errorMsg+'</span>');
 					}
@@ -225,13 +237,15 @@ var validateField = function(field,valid,globalOptions){
 
 					if(globalOptions.errorCustom.customFlag){
 						if(globalOptions.errorCustom.regionText){
-							
+								if(el.attr("type")=='password'){
+									el.attr("type","text");
+								};
 								var textValue=el.val();
 								el.val(errorMsg).css("color","#cccccc").attr("srcValue",textValue);
 						}else{
-							curTextDiv.siblings(".error-custom").text(errorMsg);					
+							el.siblings("."+globalOptions.errorStyle.errorRegion).text(errorMsg);					
 						}
-	
+						el.attr("lable-error",true);
 
 					}else{
 						if(curErrorEl.hasClass('help-inline')){
@@ -253,12 +267,17 @@ var validateField = function(field,valid,globalOptions){
 
 	if(globalOptions.errorCustom.customFlag){
 		
-			if(trimReplaceHtml(curTextDiv.siblings(".error-custom").text()).length>0){
-					curTextDiv.data('error-custom',pwdStrong);
+		if(globalOptions.errorCustom.regionText){
+				var textValue=el.val();
+				if(error){
+					el.val(errorMsg).css("color","#cccccc").attr("srcValue",textValue);
 				}else{
-					curTextDiv.siblings(".error-custom").append(pwdStrong);	
-			};
-
+					el.attr("srcValue",textValue);
+				}
+				
+			}else{
+					el.siblings("."+globalOptions.errorStyle.errorRegion).text(pwdStrong);					
+			}
 	}else{
 		if(curErrorEl.hasClass('help-inline')){
 				curTextDiv.data('help-inline',pwdStrong);
@@ -289,12 +308,20 @@ var validateField = function(field,valid,globalOptions){
 
 var removeElStyleClass = function(objel,globalOptions,reomveType){
 		if(globalOptions.errorStyle!=undefined){
-				var styleOption =globalOptions.errorStyle;
-					if(reomveType==1){
-						objel.parents("."+styleOption.errorRegion).removeClass(styleOption.rightClass).addClass(styleOption.errorClass);
+				var styleOption =globalOptions.errorStyle,$objelProperty;
+					if(globalOptions.errorCustom.regionText){
+						$objelProperty = objel.parents("."+styleOption.errorRegion);															
 					}else{
-						objel.parents("."+styleOption.errorRegion).removeClass(styleOption.errorClass).addClass(styleOption.rightClass);
-					};				
+						$objelProperty = objel.siblings("."+styleOption.errorRegion);					
+					};
+			
+					if(reomveType==1){
+						$objelProperty.removeClass(styleOption.rightClass).addClass(styleOption.errorClass);
+					}else{
+						$objelProperty.removeClass(styleOption.errorClass).addClass(styleOption.rightClass);
+					};	
+					
+					
 			}else{					
 					if(reomveType==1){
 						objel.removeClass('right').addClass('error');
@@ -355,8 +382,8 @@ var checkDate = function(value){
 };
 
 	
-var confirmPwd = function(value) {
-    var inputObj = $("input[type='password']");
+var confirmPwd = function(value,objel) {
+    var inputObj = $(objel).parents("form").find("input[type='password']");
     var pwd1="",pwd2="";
     if(inputObj.size()==3){
         pwd1 = $.trim(inputObj.eq(1).val());
