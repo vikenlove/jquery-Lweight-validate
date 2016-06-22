@@ -55,6 +55,16 @@ options：
         formKey: 是否开启回车键监听,true/false 不配置，则等于为false(非必配选项)
         alterCall:alert 弹出方式自定义回调函数，此方法用于自定义的
                   alert效果 function(msg){callbackFunction(msg);}	（非必配选项）
+                  增加
+errorCustom:{customFlag :true,regionText:false},
+增加自定义属性：
+  customFlag :true 为自定义错误校验信息显示位置，
+  regionText：true 错误信息显示在文本框内效果
+errorStyle:{errorRegion:"error-div",errorClass:"textError",rightClass:"right-item"},
+错误信息样式 自定义
+        errorRegion：样式DIV 显示位置。
+        errorClass：错误样式样式表值
+rightClass：正确显示样式表
 </pre>
 
 ==============
