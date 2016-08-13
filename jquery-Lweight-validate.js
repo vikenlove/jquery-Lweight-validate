@@ -53,7 +53,7 @@
  
   $.fn.defaults = {
         validRules : [
-            {name: 'required', validate: function(value) {return (($.trim(value) == ''||$.trim(value).length==0||$.trim(value)==null)||($.trim(value).length>20));}, defaultMsg: '请输入内容,字符数不能超过20。'},
+            {name: 'required', validate: function(value) {return (($.trim(value) == ''||$.trim(value).length==0);}, defaultMsg: '请输入内容,字符数不能超过20。'},
 			{name: 'unRequired', validate: function(value) {return false;}, defaultMsg: '请输入内容。'},
             {name: 'number', validate: function(value) { return (!/^[0-9]+(\.)?[0-9]*$/.test($.trim(value)));}, defaultMsg: '请输入数字。'},
             {name: 'mail', validate: function(value) {return (!/^[a-zA-Z0-9]{1}([\._a-zA-Z0-9-]+)(\.[_a-zA-Z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+){1,3}$/.test($.trim(value)));}, defaultMsg: '请输入邮箱地址。'},
