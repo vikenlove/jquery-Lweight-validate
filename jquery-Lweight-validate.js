@@ -2,7 +2,7 @@
  * jquery-Lightweight-validation.js 
  * Original Idea: (Copyright 2013 Viken)
  * Updated by 大猫 
- * version 1.1.5 
+ * version 1.1.5
  * =========================================================
  * http://vikenlove.github.io/jquery-Lweight-validate
  * http://www.oschina.net/p/jquery-lweight-validate 
@@ -20,10 +20,10 @@
  * ========================================================= */
 ;(function($) {     	
 	$.fn.myValidate = function(options) {
-		var globalOptions  = $.extend({}, defaults, options);
+		var globalOptions  = $.extend({}, $.fn.defaults, options);
 			var $this = this;
 			$this.find('[btn-type=true]').click(function(){
-					validateClick($this,globalOptions);
+				validateClick($this,globalOptions,$(this).attr("btn-val"));
 			});
 			if(globalOptions.formKey){
 				$(document).keyup(function(event){
@@ -38,32 +38,38 @@
 	};
 
 
-	var validateClick = function(obj,globalOptions){
+	var validateClick = function(obj,globalOptions,btnVal){
 		if(!validateForm(obj,globalOptions)){
 			if(globalOptions.formCall != undefined){
-				globalOptions.formCall();
+				if(btnVal!=undefined){
+					globalOptions.formCall(btnVal);
+				}else{
+					globalOptions.formCall();
+				}
 			}	
 		}	
 	};
 	
  
-  var defaults = {
+  $.fn.defaults = {
         validRules : [
-            {name: 'required', validate: function(value) {return ($.trim(value) == ''||$.trim(value).length==0||$.trim(value)==null);}, defaultMsg: '请输入内容。'},
+            {name: 'required', validate: function(value) {return (($.trim(value) == ''||$.trim(value).length==0||$.trim(value)==null)||($.trim(value).length>20));}, defaultMsg: '请输入内容,字符数不能超过20。'},
 			{name: 'unRequired', validate: function(value) {return false;}, defaultMsg: '请输入内容。'},
-            {name: 'number', validate: function(value) {return (!/^[0-9]\d*$/.test($.trim(value)));}, defaultMsg: '请输入数字。'},
+            {name: 'number', validate: function(value) { return (!/^[0-9]+(\.)?[0-9]*$/.test($.trim(value)));}, defaultMsg: '请输入数字。'},
             {name: 'mail', validate: function(value) {return (!/^[a-zA-Z0-9]{1}([\._a-zA-Z0-9-]+)(\.[_a-zA-Z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+){1,3}$/.test($.trim(value)));}, defaultMsg: '请输入邮箱地址。'},
             {name: 'char', validate: function(value) {return (!/^[a-z\_\-A-Z]*$/.test($.trim(value)));}, defaultMsg: '请输入英文字符。'},
             {name: 'chinese', validate: function(value) {return (!/^[\u4e00-\u9fff]+$/.test($.trim(value)));}, defaultMsg: '请输入汉字。'},
 			{name: 'mobile', validate: function(value) {return (!/^(13|15|18)[0-9]{9}$/.test($.trim(value)));}, defaultMsg: '请输入正确手机号码。'},
-			{name: 'tell', validate: function(value) {return (!/^(([0\+]\d{2,3}-)?(0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/.test($.trim(value)));}, defaultMsg: '请输入正确电话号码格式:区号-号码。'},
+			{name: 'tell', validate: function(value) {return checkTel($.trim(value));}, defaultMsg: '请输入正确电话号码格式:区号-号码或手机号。'},
 			{name: 'passWord', validate: function(value) {return checkPwd($.trim(value));}, defaultMsg: '密码长度必须在6~20之间。'},
 			{name: 'confirmPwd', validate: function(value,objel) {return confirmPwd($.trim(value),objel);}, defaultMsg: '两次密码不一致'},
 			{name: 'dateYmd', validate: function(value) {return checkDate($.trim(value));}, defaultMsg: '请输入YYYY--MM--DD格式'},
 			{name: 'idCard', validate: function(value) {return checkIdCard($.trim(value));}, defaultMsg: '请输入正确的身份证号码'},
 			{name: 'dateCompare', validate: function(value) {return dateCompare();}, defaultMsg: '起始日期不能大于结束日期'},
-			{name: 'url', validate: function(value) {return (!/^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test($.trim(value)))}, defaultMsg: '请输正确的网址。'}
-			
+			{name: 'checkLength', validate: function(value) {return ($.trim(value).length>20);}, defaultMsg: '字符长度不能超过20。'},
+			{name: 'url', validate: function(value) {return (!/^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test($.trim(value)))}, defaultMsg: '请输正确的网址。'},
+			{name: 'username', validate: function(value) {return (!/^[a-zA-Z]{1}([a-zA-Z0-9]|[._]){4,19}$/.test($.trim(value)))}, defaultMsg: '请输入5-20个以字母开头、可带数字、“_”、“.”的字串'}
+
 			
 			
         ],
@@ -93,7 +99,7 @@ var validateBlur = function(obj,globalOptions){
 		
 			el.focus(function(){
 				var curTextDiv=el.parent(), curErrorEl = curTextDiv.children('.help-inline');
-				el.removeAttr("lable-error");
+				
 				if(globalOptions.errorCustom.customFlag){
 						if(globalOptions.errorCustom.regionText){
 							var checkType = el.attr("check-type");
@@ -126,30 +132,28 @@ var validateBlur = function(obj,globalOptions){
 		
 };				
 var validateForm=function(obj,globalOptions){
-	//TODO shuangjia hou 能提交
+	
 	 var validationError = false;
 	$(obj).find("input:visible,textarea:visible,select:visible").each(function(){
 	
 	var el = $(this);
 	var valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
-		if(el.attr("lable-error")){
-			validationError=true;
-			return;
-		};
-	
+		
 		if(valid!==null && valid.length>0){
 			if(!validateField(el,valid,globalOptions)){
 				validationError=true;
 			}
-		};
+		}
 		if(globalOptions.isAlert){
 			if(validationError){
 				return false;
 			}				
-		};		
+		}		
 	});
 	return validationError;
 };
+
+
 var validateField = function(field,valid,globalOptions){
 	 var el = $(field);
 	 var error = false,isNonFlag=false, errorMsg = '',pwdStatus=0,elLength=el.val().length;		
@@ -245,7 +249,7 @@ var validateField = function(field,valid,globalOptions){
 						}else{
 							el.siblings("."+globalOptions.errorStyle.errorRegion).text(errorMsg);					
 						}
-						el.attr("lable-error",true);
+	
 
 					}else{
 						if(curErrorEl.hasClass('help-inline')){
@@ -399,16 +403,19 @@ var confirmPwd = function(value,objel) {
 var checkPwd = function(value){
 	if(value.length >= 6 && value.length<=20)
 	{		
-		if(/[a-zA-Z]+/.test(value) && /[0-9]+/.test(value) && /\W+\D+/.test(value)) {
+		if(/[a-zA-Z_]+/.test(value) && /[0-9]+/.test(value) && /\W+/.test(value)) {
+				return 4;
+		}else if(/[a-zA-Z_]+/.test(value) || /[0-9]+/.test(value) || /\W+/.test(value)) {
+			if(/[a-zA-Z_]+/.test(value) && /[0-9]+/.test(value)) {
+				return 2;
+			}else if(/[a-zA-Z_]+/.test(value) && /\W+/.test(value)) {
+				return 2;
+			}else if(/[0-9]+/.test(value) && /\W+/.test(value)) {
+				return 2;
+			}else if(/[a-zA-Z_]+/.test(value) && /[0-9]+/.test(value) && /\W+/.test(value)){
 				return 1;
-		}else if(/[a-zA-Z]+/.test(value) || /[0-9]+/.test(value) || /\W+\D+/.test(value)) {
-			if(/[a-zA-Z]+/.test(value) && /[0-9]+/.test(value)) {
-				return 2;
-			}else if(/\[a-zA-Z]+/.test(value) && /\W+\D+/.test(value)) {
-				return 2;
-			}else if(/[0-9]+/.test(value) && /\W+\D+/.test(value)) {
-				return 2;
-			}else{
+			}
+			else{
 				return 3;
 			}
 		}	
@@ -416,11 +423,18 @@ var checkPwd = function(value){
 		return true;
 	}
 };
+//Add BY Loren
+var checkTel= function(value){
+	var r = value.match(/^(17[0-9]|13[0-9]|15[0|1|3|6|7|8|9]|18[8|9])\d{8}$/); 
+	var r1 = value.match(/^(\d{3,4}|\d{3,4}-|\s)?\d{8}$/); 
+	if(r==null && r1==null)return true; 
+	
+}
 
 var classStatus = function(i){
 	var status ='';
 	switch(i){
-		case 1:
+		case 4:
 			status="passWord3";
 			break;
 		case 2:
@@ -436,7 +450,7 @@ var classStatus = function(i){
 var passWordStatus = function(i){
 	var status ='';
 	switch(i){
-		case 1:
+		case 4:
 			status="强";
 			break;
 		case 2:
