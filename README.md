@@ -10,13 +10,16 @@ $('#form').myValidate(options)
 </code>
 <pre>
 例:
-   	$('#form').myValidate(
+  $('#form').myValidate(
 			{
-				formCall:function(){formCallFunction();},
+				formCall:function(data){formCallFunction(data);},
 				isAlert:false,
 				formKey:false,
+				errorCustom:{customFlag:true,regionText:false},
+				errorStyle:{errorRegion:"error-div",errorClass:"textError",rightClass:"right-item"},
 				alterCall:function(msg){callbackFunction(msg);}			
-			});	
+			});						
+		});
 
 </pre>
 
@@ -38,6 +41,7 @@ $('#form').myValidate(options)
    dateYmd：日期格式-例：yyyy-MM-dd
    idCard：身份证号码
    dateCompare：前后日起大小-例：起始日期-结束日期 之间比较
+   username:只能注册非中文用户名
 </pre>
 校验属性-other config：
 
