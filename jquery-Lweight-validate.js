@@ -2,7 +2,7 @@
  * jquery-Lightweight-validation.js 
  * Original Idea: (Copyright 2013 Viken)
  * Updated by 大猫 
- * version 1.1.5
+ * version 1.1.6
  * =========================================================
  * http://vikenlove.github.io/jquery-Lweight-validate
  * http://www.oschina.net/p/jquery-lweight-validate 
@@ -22,9 +22,12 @@
 	$.fn.myValidate = function(options) {
 		var globalOptions  = $.extend({}, $.fn.defaults, options);
 			var $this = this;
-			$this.find('[btn-type=true]').click(function(){
+			//replace click event by mousedown，because blur and click was run at the same time，blur run before click。
+			$this.find('[btn-type=true]').on("mousedown",function(){
 				validateClick($this,globalOptions,$(this).attr("btn-val"));
 			});
+			
+			
 			if(globalOptions.formKey){
 				$(document).keyup(function(event){
 				  switch(event.keyCode) {
@@ -39,6 +42,7 @@
 
 
 	var validateClick = function(obj,globalOptions,btnVal){
+		globalOptions.eventStatus =  true;
 		if(!validateForm(obj,globalOptions)){
 			if(globalOptions.formCall != undefined){
 				if(btnVal!=undefined){
@@ -53,7 +57,7 @@
  
   $.fn.defaults = {
         validRules : [
-            {name: 'required', validate: function(value) {return (($.trim(value) == ''||$.trim(value).length==0);}, defaultMsg: '请输入内容,字符数不能超过20。'},
+            {name: 'required', validate: function(value) {return ($.trim(value) == ''||$.trim(value).length==0);}, defaultMsg: '请输入内容,字符数不能超过20。'},
 			{name: 'unRequired', validate: function(value) {return false;}, defaultMsg: '请输入内容。'},
             {name: 'number', validate: function(value) { return (!/^[0-9]+(\.)?[0-9]*$/.test($.trim(value)));}, defaultMsg: '请输入数字。'},
             {name: 'mail', validate: function(value) {return (!/^[a-zA-Z0-9]{1}([\._a-zA-Z0-9-]+)(\.[_a-zA-Z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+){1,3}$/.test($.trim(value)));}, defaultMsg: '请输入邮箱地址。'},
@@ -93,11 +97,13 @@ var validateBlur = function(obj,globalOptions){
 	$(obj).find("input,textarea,select").each(function(){
 	
 	var el = $(this);
+	
 	var valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
 		
 		if(valid!==null && valid.length>0){
 		
 			el.focus(function(){
+				globalOptions.eventStatus=false;
 				var curTextDiv=el.parent(), curErrorEl = curTextDiv.children('.help-inline');
 				
 				if(globalOptions.errorCustom.customFlag){
@@ -108,6 +114,7 @@ var validateBlur = function(obj,globalOptions){
 							};
 								el.val(el.attr("srcValue")).css("color","");
 						}else{
+							
 							el.siblings("."+globalOptions.errorStyle.errorRegion).text("").removeClass(globalOptions.errorStyle.errorClass);
 						}					
 				}else{
@@ -122,7 +129,10 @@ var validateBlur = function(obj,globalOptions){
 				if(el.attr("check-type")=='dateYmd'){
 					setTimeout(function(){validateField(el, valid,globalOptions);},500); 
 				}else{
-					validateField(el, valid,globalOptions);
+					if(!globalOptions.eventStatus){
+						validateField(el, valid,globalOptions);						
+					}
+					
 				}
             });
 			
@@ -155,17 +165,18 @@ var validateForm=function(obj,globalOptions){
 
 
 var validateField = function(field,valid,globalOptions){
-	 var el = $(field);
-	 var error = false,isNonFlag=false, errorMsg = '',pwdStatus=0,elLength=el.val().length;		
+	 var el = $(field),_elVal=$.trim(el.val());
+	
+	 var error = false,isNonFlag=false, errorMsg = '',pwdStatus=0,elLength = (_elVal!==null||_elVal!="")?_elVal.length:0;
 	 var isNon = (el.attr('non-required')==undefined||el.attr('non-required')=='false')?false:true;
 	 var rules = globalOptions.validRules;
 		for(var i=0,j=rules.length;i<j;i++){
 			var rule = rules[i];
 		
 			if(valid==rule.name){
-				var ruleVal = rule.validate(el.val(),el);
+				var ruleVal = rule.validate(_elVal,el);
 				if(isNon){
-					if($.trim(el.val()).length > 0){
+					if(elLength > 0){
 						if(ruleVal==true||ruleVal==-1){
 							error=true;
 							errorMsg=(el.attr('required-message')==undefined)?rule.defaultMsg:el.attr('required-message');
@@ -183,7 +194,7 @@ var validateField = function(field,valid,globalOptions){
 		}
 	if(!error){
 	
-		if(el.val().length >0){
+		if(elLength >0){
 			var minMax = (el.attr('min-max')==undefined)?null:el.attr('min-max').split(' ');	
 			var _callBack = (el.attr('data-callback')==undefined)?null:el.attr('data-callback').split(' ');
 			
