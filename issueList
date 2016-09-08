@@ -3,6 +3,11 @@ jquery-Lweight-validate
 http://vikenlove.github.io/jquery-Lweight-validate
 http://www.oschina.net/p/jquery-lweight-validate 
 ============================================================================================
+version 1.1.6
+用mousedown事件替换click事件，以修复 blur 和click 事件冲突和点击事件blur优先click执行
+优化el.val 多次取值
+修复基于select2插件下的 下拉插件取值错误
+============================================================================================
 version 1.1.5
 修复 bootsrap 弹窗情况下chrome无法获取基本属性
 修复regionText 下第二次点击提交通过校验问题.
